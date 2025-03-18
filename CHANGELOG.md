@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+### Added
+
+- Snapshots: fold/unfold windows/panels/tabs (resolves [#1071](https://github.com/mbnuqw/sidebery/issues/1071))  
+
+### Fixed
+
+- Containers: handle regex flags for include/exclude rules (resolves [#1821](https://github.com/mbnuqw/sidebery/issues/1821))  
+- Dnd: update drop status request timeout to 10000ms (by [@the-nelsonator](https://github.com/the-nelsonator): [#2039](https://github.com/mbnuqw/sidebery/issues/2039))  
+  Fixes https://github.com/mbnuqw/sidebery/issues/2038
+- Use system-ui instead of sans-serif (resolves [#2031](https://github.com/mbnuqw/sidebery/issues/2031))
+
+
+## 5.3.3 - 2025.02.22
+
 ### Fixed
 
 - Recently closed tabs (sub-panel): close it right after dnd start
