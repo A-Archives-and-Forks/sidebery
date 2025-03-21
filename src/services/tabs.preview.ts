@@ -139,6 +139,8 @@ export function resetTargetTab(tabId: ID) {
   }
 }
 
+let cancelInjecting: (() => void) | undefined
+
 async function injectTabPreview(tabId: ID, y?: number) {
   const activeTab = Tabs.byId[Tabs.activeId]
   if (!activeTab) return
@@ -165,8 +167,12 @@ async function injectTabPreview(tabId: ID, y?: number) {
     .catch(() => {
       // Cannot exec script
     })
-  const [result, _] = await Promise.all([injectingData, injectingScript])
-  return result
+
+  const cancelation = new Promise<void>((ok, _) => (cancelInjecting = ok))
+  const results = await Promise.any([Promise.all([injectingData, injectingScript]), cancelation])
+  cancelInjecting = undefined
+
+  return results?.[0]
 }
 
 function getTabPreviewInitData(tabId: ID, y?: number): TabPreviewInitData {
@@ -217,6 +223,10 @@ async function showPreview(tabId: ID, y?: number) {
         closePreviewPopup()
       }
 
+      return
+    } else if (deadOnArrival) {
+      state.status = Status.Closed
+      deadOnArrival = false
       return
     }
 
@@ -417,6 +427,7 @@ export function updatePreviewPopup(tabId: ID) {
 export async function closePreviewPopup() {
   if (state.status === Status.Opening) {
     deadOnArrival = true
+    if (cancelInjecting) cancelInjecting()
     return
   }
 
