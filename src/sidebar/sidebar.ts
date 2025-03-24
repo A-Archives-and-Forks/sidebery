@@ -151,6 +151,12 @@ async function main(): Promise<void> {
     if (Tabs.byId[Tabs.editableTabId]) Tabs.onOutsideEditingExit()
   })
 
+  IPC.onConnected(InstanceType.preview, () => {
+    if (Preview.state.status === Preview.Status.Closed) {
+      IPC.sendToPreview('close')
+    }
+  })
+
   if (Settings.state.updateSidebarTitle) Sidebar.updateSidebarTitle(0)
 
   window.getSideberyState = () => {
