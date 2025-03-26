@@ -767,7 +767,7 @@ export function parseSnapshot(
           iconSVG: Favicons.getFavPlaceholder(tab.url),
           sel: false,
           folded: !!tab.folded,
-          isParent: nextTab && (nextTab.lvl ?? 0) > tabLvl && tab.panelId === nextTab.panelId,
+          isParent: !!nextTab && (nextTab.lvl ?? 0) > tabLvl && tab.panelId === nextTab.panelId,
           invisible: false,
           branchLen: 0,
         }
