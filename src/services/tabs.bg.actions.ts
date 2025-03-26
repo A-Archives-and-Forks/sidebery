@@ -441,6 +441,7 @@ export async function updateBgTabsTreeData(): Promise<void> {
     if (sidebarConnection) {
       receivingSidebarTrees.push(IPC.sidebar(window.id, 'getTabsTreeData'))
     } else {
+      Logs.warn('Tabs.updateBgTabsTreeData: No connected sidebar:', window.id)
       receivingSidebarTrees.push(Promise.resolve([]))
     }
   }
@@ -449,13 +450,17 @@ export async function updateBgTabsTreeData(): Promise<void> {
   try {
     trees = await Promise.all(receivingSidebarTrees)
   } catch (err) {
+    Logs.err('Tabs.updateBgTabsTreeData: Error on receivingSidebarTrees:', err)
     trees = []
   }
 
   for (let tree, window, i = 0; i < windowsList.length; i++) {
     tree = trees[i]
     window = windowsList[i]
-    if (!window?.tabs) continue
+    if (!window?.tabs) {
+      Logs.warn('Tabs.updateBgTabsTreeData: No window tabs, i:', i)
+      continue
+    }
 
     const treeDataById: Record<ID, TabTreeData> = {}
     let prevPanelId = NOID

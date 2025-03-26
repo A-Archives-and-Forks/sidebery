@@ -84,7 +84,10 @@ export async function createSnapshot(auto = false): Promise<Snapshot | undefined
       // Check panel
       if (snapTab.panelId !== -1) {
         const panelConf = stored.sidebar.panels[snapTab.panelId]
-        if (!panelConf) snapTab.panelId = -1
+        if (!panelConf) {
+          Logs.warn('Snapshots.createSnapshot: Unable to find a panel for tab:', snapTab.panelId)
+          snapTab.panelId = -1
+        }
       }
 
       // Check container
@@ -522,9 +525,12 @@ async function adaptTabsPanels(snapshot: NormalizedSnapshot): Promise<void> {
       win.shift()
     }
 
-    // Tabs w/o panelId
+    // Tabs list w/o panelId in the first tab
     for (const tabs of win) {
-      if (tabs[0]?.panelId === NOID) newOrder.push(tabs)
+      if (tabs[0]?.panelId === NOID) {
+        Logs.warn('Snapshots.adaptTabsPanels: Tabs list without panelId, len:', tabs.length)
+        newOrder.push(tabs)
+      }
     }
 
     for (const storedId of stored.sidebar.nav) {
@@ -578,6 +584,8 @@ async function openWindow(snapshot: NormalizedSnapshot, winIndex: number): Promi
   const tabsInfoByLvl: Record<number, ItemInfo> = {}
   let index = 0
   for (const panel of winTabs) {
+    Logs.info('Snapshots.openWindow: panel/pin panelId, len:', panel[0]?.panelId, panel.length)
+
     for (const tab of panel) {
       if (tab.panelId === GLOB_PINNED_ID) tab.panelId = NOID
 
@@ -739,6 +747,7 @@ export function parseSnapshot(
               panelConfig.name = translate('snapshot.global_pin_title')
               panelConfig.iconSVG = 'icon_pin'
             } else {
+              Logs.warn('Snapshots.parseSnapshot: No panel config for', tab.panelId)
               panelConfig.id = NOID
               tab.panelId = NOID
             }
