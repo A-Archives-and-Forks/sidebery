@@ -21,8 +21,8 @@
             svg: use(xlink:href="#icon_trash")
 
     .active-snapshot-section
-      .header(v-if="state.activeSnapshot" @wheel="onHeaderWheel" :data-empty="!state.activeSnapshot")
-        .title {{state.activeSnapshot?.dateStr ?? '?'}} - {{state.activeSnapshot?.timeStr ?? '?'}}
+      .header(v-if="state.activeSnapshot" :data-empty="!state.activeSnapshot")
+        .title(@wheel="onHeaderWheel") {{state.activeSnapshot?.dateStr ?? '?'}} - {{state.activeSnapshot?.timeStr ?? '?'}}
         DropDownButton(
           :label="translate('snapshot.btn_export_snapshot')"
           @open="onExportSnapshotDropDownOpen")
