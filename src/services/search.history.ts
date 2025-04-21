@@ -32,7 +32,6 @@ export async function onHistorySearch(noSel?: boolean): Promise<void> {
     if (first && !noSel) {
       if (Search.reactive.barIsFocused) {
         Selection.resetSelection()
-        Selection.selectHistory(first.id)
       }
       History.scrollToHistoryItemDebounced(120, first.id)
     }
