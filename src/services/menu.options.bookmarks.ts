@@ -1,5 +1,5 @@
 import { isBookmarksPanel, isTabsPanel } from 'src/utils'
-import { BKM_ROOT_ID, CONTAINER_ID } from 'src/defaults'
+import { BKM_OTHER_ID, BKM_ROOT_ID, CONTAINER_ID, NOID } from 'src/defaults'
 import { MenuOption } from 'src/types'
 import { translate } from 'src/dict'
 import { Settings } from 'src/services/settings'
@@ -10,6 +10,7 @@ import { Bookmarks } from 'src/services/bookmarks'
 import { Menu } from 'src/services/menu'
 import { Sidebar } from 'src/services/sidebar'
 import { Search } from './search'
+import { Logs, Utils } from './_services'
 
 export const bookmarksMenuOptions: Record<string, () => MenuOption | MenuOption[] | undefined> = {
   openInNewWin: () => {
@@ -357,6 +358,15 @@ export const bookmarksMenuOptions: Record<string, () => MenuOption | MenuOption[
     }
 
     if (opts.length) return opts
+  },
+
+  pasteBookmarks: () => {
+    const id = Selection.getLast()
+    return {
+      label: translate('menu.paste'),
+      icon: 'icon_paste',
+      onClick: () => Bookmarks.pasteInOrAfter(id),
+    }
   },
 
   moveBookmarksTo: () => {

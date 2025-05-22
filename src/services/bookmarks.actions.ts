@@ -1520,6 +1520,93 @@ function formatCopyTemplate(ids: ID[], nodes: Bookmark[], template: CopyTemplate
   return lines
 }
 
+export async function pasteInOrAfter(id: ID) {
+  const panel = Sidebar.panelsById[id]
+  if (Utils.isBookmarksPanel(panel)) {
+    id = panel.rootId
+    if (id === BKM_ROOT_ID || id === NOID) {
+      id = BKM_OTHER_ID
+    }
+  }
+
+  await Bookmarks.prepareBookmarks()
+
+  const target = Bookmarks.reactive.byId[id]
+  if (!target) return Logs.warn('Bookmarks.pasteInOrAfter: No target')
+
+  if (target.type === 'folder') Bookmarks.pasteIn(id)
+  else Bookmarks.pasteAfter(id)
+}
+
+export async function pasteIn(id: ID) {
+  if (id === BKM_ROOT_ID || id === NOID) {
+    id = BKM_OTHER_ID
+  }
+
+  const bkmNode = Bookmarks.reactive.byId[id]
+  if (!bkmNode || bkmNode.type !== 'folder' || !bkmNode.children) {
+    return Logs.warn('Bookmarks.pasteIn: No target folder')
+  }
+
+  const dst: DstPlaceInfo = {
+    parentId: bkmNode.id,
+    index: bkmNode.children.length,
+  }
+
+  return paste(dst)
+}
+
+export async function pasteAfter(id: ID) {
+  const bkmNode = Bookmarks.reactive.byId[id]
+  if (!bkmNode) return Logs.warn('Bookmarks.pasteAfter: No target bookmark')
+
+  const parentNode = Bookmarks.reactive.byId[bkmNode.parentId]
+  if (!parentNode) return Logs.warn('Bookmarks.pasteAfter: No target folder')
+
+  const dst: DstPlaceInfo = {
+    parentId: parentNode.id,
+    index: bkmNode.index + 1,
+  }
+
+  return paste(dst)
+}
+
+export async function paste(dst: DstPlaceInfo) {
+  // Check permission
+  if (!Permissions.reactive.clipboardRead) {
+    const result = await Permissions.request('clipboardRead')
+    if (!result) return Logs.warn('Bookmarks.paste: No permission')
+  }
+
+  // Load bookmarks
+  await Bookmarks.prepareBookmarks()
+
+  // Get and parse text from clipboard
+  const rawText = await navigator.clipboard.readText()
+  const items = Utils.withoutEmptyFolders(Utils.parseTextForItems(rawText))
+  if (!items.length) return Logs.warn('Bookmarks.paste: No parsed items')
+
+  // Check/Normalize dst info
+  // - Parent tab
+  if (dst.parentId === undefined) {
+    dst.parentId = BKM_OTHER_ID
+    dst.index = undefined
+  }
+  const dstParent = Bookmarks.reactive.byId[dst.parentId]
+  if (!dstParent || !dstParent.children) return Logs.warn('Bookmarks.paste: No parent folder')
+  // - Index
+  if (dst.index === undefined) {
+    dst.index = dstParent.children.length
+  }
+
+  // Create bookmarks
+  await createFrom(items, dst)
+
+  // Scroll to the first node
+  const bkmNode = dstParent.children[dst.index]
+  if (bkmNode) Bookmarks.scrollToBookmark(bkmNode.id)
+}
+
 export function isFolderWithURL(folder: Bookmark): boolean {
   if (!folder.children) return false
 

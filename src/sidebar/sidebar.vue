@@ -124,6 +124,7 @@ import { Windows } from 'src/services/windows'
 import { Search } from 'src/services/search'
 import { SwitchingTabScope } from 'src/services/tabs.fg.actions'
 import { Sync } from 'src/services/_services'
+import { Info } from 'src/services/info'
 import ConfirmPopup from './components/popup.confirm.vue'
 import CtxMenuPopup from './components/popup.context-menu.vue'
 import DragAndDropTooltip from './components/dnd-tooltip.vue'
@@ -301,6 +302,30 @@ function onDocumentKeydown(e: KeyboardEvent): void {
   if (e.code === 'Enter') {
     // Confirm popup
     if (Popups.reactive.confirm?.ok) Popups.reactive.confirm.ok()
+  }
+
+  // Paste
+  if (e.code === 'KeyV' && (Info.reactive.os === 'mac' ? e.metaKey : e.ctrlKey)) {
+    let actPanel
+    if (Sidebar.subPanelActive) actPanel = Sidebar.subPanels.bookmarks
+    else actPanel = Sidebar.panelsById[Sidebar.activePanelId]
+
+    if (Utils.isTabsPanel(actPanel)) {
+      if (Selection.isTabs()) {
+        Tabs.pasteAfter(Selection.ids())
+      } else {
+        Tabs.paste({ panelId: Sidebar.activePanelId })
+      }
+    } else if (Utils.isBookmarksPanel(actPanel)) {
+      if (Selection.isBookmarks()) {
+        const target = Bookmarks.reactive.byId[Selection.getLast()]
+        if (!target) return Logs.warn('Sidebar.onDocumentKeyup: Paste bkm: No sel target')
+        if (target.type === 'folder') Bookmarks.pasteIn(target.id)
+        else Bookmarks.pasteAfter(target.id)
+      } else {
+        Bookmarks.pasteIn(actPanel.rootId)
+      }
+    }
   }
 }
 

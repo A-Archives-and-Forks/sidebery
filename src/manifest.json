@@ -42,6 +42,7 @@
     "bookmarks",
     "tabHide",
     "clipboardWrite",
+    "clipboardRead",
     "history",
     "downloads"
   ],

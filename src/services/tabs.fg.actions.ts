@@ -1,9 +1,9 @@
 import * as Utils from 'src/utils'
-import { CONTAINER_ID, GROUP_URL, NOID, Err, SAMEID } from 'src/defaults'
+import { CONTAINER_ID, GROUP_URL, NOID, Err, SAMEID, URL_URL } from 'src/defaults'
 import { BKM_OTHER_ID, ADDON_HOST, BKM_ROOT_ID } from 'src/defaults'
 import { translate } from 'src/dict'
 import { Stored, Tab, Panel, TabCache, ActiveTabsHistory, ReactiveTabProps } from 'src/types'
-import { Notification, TabSessionData, TabsTreeData, NativeTab } from 'src/types'
+import { Notification, TabSessionData, TabsTreeData, NativeTab, DstPlaceInfo } from 'src/types'
 import { ItemInfo, TabTreeData, TabStatus, CopyTemplate } from 'src/types'
 import { Tabs } from 'src/services/tabs.fg'
 import * as IPC from 'src/services/ipc'
@@ -2629,6 +2629,135 @@ export async function copy(ids: ID[], template: CopyTemplate) {
 
   const resultString = lines.join('\n')
   if (resultString) navigator.clipboard.writeText(resultString)
+}
+
+export async function pasteInPanelOrAfterTabs(ids: ID[]) {
+  if (ids.length === 1 && Utils.isTabsPanel(Sidebar.panelsById[ids[0]])) {
+    return paste({ panelId: ids[0], discarded: true })
+  } else {
+    return pasteAfter(ids)
+  }
+}
+
+export async function pasteAfter(dstIds: ID[]) {
+  Tabs.sortTabIds(dstIds)
+
+  const lastSelTabId = dstIds[dstIds.length - 1]
+  const lastSelTab = Tabs.byId[lastSelTabId]
+  if (!lastSelTab) return Logs.warn('Tabs.pasteAfter: No dst tab')
+
+  const pinned = lastSelTab.pinned
+  const panelId = lastSelTab.panelId
+  const parentId = lastSelTab.parentId
+  let index = lastSelTab.index + 1
+  if (lastSelTab.isParent) {
+    index = lastSelTab.index + (Tabs.getBranchLen(lastSelTab.id) ?? 0) + 1
+  }
+
+  const dst: DstPlaceInfo = {
+    index,
+    parentId,
+    discarded: true,
+    pinned,
+    panelId,
+  }
+
+  return paste(dst)
+}
+
+export async function paste(dst: DstPlaceInfo) {
+  // Check permission
+  if (!Permissions.reactive.clipboardRead) {
+    const result = await Permissions.request('clipboardRead')
+    if (!result) return Logs.warn('Tabs.paste: No permission')
+  }
+
+  // Get and parse text from clipboard
+  const rawText = await navigator.clipboard.readText()
+  const items = Utils.parseTextForItems(rawText)
+  if (!items.length) return Logs.warn('Tabs.paste: No parsed items')
+
+  // Check/Normalize dst info
+  // - Panel
+  let dstPanel
+  if (dst.panelId === undefined && (!dst.pinned || Settings.state.pinnedTabsPosition === 'panel')) {
+    dst.parentId = undefined
+    dst.index = undefined
+    dstPanel = Sidebar.panelsById[Sidebar.activePanelId]
+    if (Utils.isTabsPanel(dstPanel)) dst.panelId = Sidebar.activePanelId
+    else return Logs.warn('Tabs.paste: Unable to find dst panel')
+  } else if (dst.panelId) {
+    dstPanel = Sidebar.panelsById[dst.panelId]
+    if (!Utils.isTabsPanel(dstPanel)) return Logs.warn('Tabs.paste: Wrong dst panel')
+  } else {
+    dst.panelId = NOID
+  }
+  // - Parent tab
+  let dstParent
+  if (!dst.pinned) {
+    if (dst.parentId === undefined) {
+      dst.index = undefined
+      dst.parentId = NOID
+    } else if (dst.parentId !== NOID) {
+      dstParent = Tabs.byId[dst.parentId]
+      if (!dstParent || dstParent.panelId !== dst.panelId) {
+        return Logs.warn('Tabs.paste: Wrong dst parent tab')
+      }
+    }
+  } else {
+    dst.parentId = NOID
+  }
+  // - Index
+  if (dst.index === undefined) {
+    if (dstParent) {
+      const branchLen = Tabs.getBranchLen(dstParent.id) ?? 0
+      dst.index = dstParent.index + branchLen + 1
+    } else if (dstPanel) {
+      dst.index = dstPanel.nextTabIndex
+    } else if (dst.pinned) {
+      dst.index = Tabs.pinned.length
+    } else {
+      return Logs.warn('Tabs.paste: No dst index')
+    }
+  } else {
+    let indexIsOk = true
+    if (dst.pinned) {
+      indexIsOk = dst.index >= 0 && dst.index <= Tabs.pinned.length
+    } else {
+      indexIsOk = dst.index >= Tabs.pinned.length
+      if (indexIsOk && dstPanel) {
+        indexIsOk = dst.index >= dstPanel.startTabIndex && dst.index <= dstPanel.nextTabIndex
+      }
+      if (indexIsOk && dstParent) {
+        const branchLen = Tabs.getBranchLen(dstParent.id) ?? 0
+        indexIsOk = dst.index > dstParent.index && dst.index <= dstParent.index + branchLen + 1
+      }
+    }
+    if (!indexIsOk) return Logs.warn('Tabs.paste: Incorrect dst index')
+  }
+
+  // Search
+  if (items.length === 1 && items[0]?.title && !items[0]?.url) {
+    const query = items[0]?.title
+
+    if (dst.pinned) {
+      browser.search.search({ query, disposition: 'NEW_TAB' })
+    } else {
+      const conf: browser.tabs.CreateProperties = {
+        active: false,
+        index: dst.index,
+        windowId: Windows.id,
+      }
+      Tabs.setNewTabPosition(dst.index, dst.parentId, dst.panelId)
+      const tabWithSearch = await browser.tabs.create(conf)
+      browser.search.search({ query, tabId: tabWithSearch.id })
+    }
+  }
+
+  // or Create discarded tabs
+  else {
+    await Tabs.open(Utils.withoutEmptyFolders(items), dst)
+  }
 }
 
 let flashAnimationTimeout: number | undefined

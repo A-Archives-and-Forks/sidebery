@@ -2061,6 +2061,15 @@ export const commonTranslations: Translations = {
   'menu.copy_by_template': {
     en: name => 'Copy ' + name,
   },
+  'menu.paste': {
+    en: 'Paste',
+    hu: 'Paszta',
+    pl: 'Pasta',
+    ru: 'Вставить',
+    zh_CN: '粘贴',
+    zh_TW: '貼上',
+    ja: 'ペースト',
+  },
   'menu.common.pin_panel': {
     en: 'Pin panel',
     de: 'Panel anheften',

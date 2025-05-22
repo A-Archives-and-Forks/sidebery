@@ -479,6 +479,15 @@ export const tabsMenuOptions: Record<string, () => MenuOption | MenuOption[] | u
     if (opts.length) return opts
   },
 
+  pasteTabs: () => {
+    const ids = Selection.ids()
+    return {
+      label: translate('menu.paste'),
+      icon: 'icon_paste',
+      onClick: () => Tabs.pasteInPanelOrAfterTabs(ids),
+    }
+  },
+
   colorizeTab: () => {
     const opts: MenuOption[] = []
     const selected = Selection.ids()
