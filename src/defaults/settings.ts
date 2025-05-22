@@ -90,6 +90,7 @@ export const DEFAULT_SETTINGS: SettingsState = {
   tabsPanelSwitchActMove: false,
   tabsPanelSwitchActMoveAuto: true,
   tabsUrlInTooltip: 'full',
+  tabsContainerInTooltip: true,
   newTabCtxReopen: false,
   tabWarmupOnHover: true,
   tabSwitchDelay: 0,

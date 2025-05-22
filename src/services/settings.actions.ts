@@ -189,7 +189,6 @@ export function updateSettingsFg(settings?: SettingsState | null): void {
     prev.navTabsPanelMidClickAction !== next.navTabsPanelMidClickAction
   const navBookmarksPanelMidClickAction =
     prev.navBookmarksPanelMidClickAction !== next.navBookmarksPanelMidClickAction
-  const tabsUrlInTooltip = prev.tabsUrlInTooltip !== next.tabsUrlInTooltip
   const newTabCtxReopen = prev.newTabCtxReopen !== next.newTabCtxReopen
   const previewTabs = prev.previewTabs !== next.previewTabs
   const previewTabsMode = prev.previewTabsMode !== next.previewTabsMode
