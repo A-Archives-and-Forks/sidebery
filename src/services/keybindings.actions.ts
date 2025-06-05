@@ -642,6 +642,10 @@ function onKeySelect(dir: number): void {
       if (!target) return
     }
 
+    // Check if there is a selection lock and if it has the same pinned state.
+    const lockSelPinned = Selection.hasLockedPinnedTabs()
+    if (lockSelPinned !== undefined && target.pinned !== lockSelPinned) return
+
     Selection.resetSelection(false, true)
     Selection.selectTab(target.id)
 
@@ -701,24 +705,39 @@ function onKeySelectExpand(dir: number): void {
   if (!activePanel) return
   if (!activePanel.bounds?.length) return
 
-  let target: ItemBounds | undefined
+  // Get targets
+  type SelTarget = { id: ID; start?: number; end?: number }
+  let targets: SelTarget[] = activePanel.bounds
+  // Check if I should select pinned tabs
+  if (Utils.isTabsPanel(activePanel)) {
+    const selPinned = Selection.hasPinnedTabs()
+    const actTab = Tabs.byId[Tabs.activeId]
+    // Use pinned tabs as targets if there are pinned tabs selected or
+    // if there is no selection and active tab is pinned
+    if (selPinned || (selPinned === undefined && actTab?.pinned)) {
+      if (Settings.state.pinnedTabsPosition === 'panel') targets = activePanel.pinnedTabs
+      else targets = Tabs.pinned
+    }
+  }
+
+  let target: SelTarget | undefined
 
   // No selected items: Find selection start
   if (!Selection.isSet()) {
     const actTab = Tabs.byId[Tabs.activeId]
     // Active tab
     if (actTab && actTab.panelId === Sidebar.activePanelId && Utils.isTabsPanel(activePanel)) {
-      target = activePanel.bounds.find(b => b.id === Tabs.activeId)
+      target = targets.find(b => b.id === Tabs.activeId)
       if (target) Selection.selectTab(target.id)
     }
 
     // or first / last element
     if (!target) {
       if (dir > 0) {
-        target = activePanel.bounds[0]
+        target = targets[0]
         Selection.select(target.id)
       } else {
-        target = activePanel.bounds[activePanel.bounds.length - 1]
+        target = targets[targets.length - 1]
         Selection.select(target.id)
       }
     }
@@ -727,8 +746,8 @@ function onKeySelectExpand(dir: number): void {
   // Change current selection
   if (Selection.isSet()) {
     const lastId = Selection.getLast()
-    const index = activePanel.bounds.findIndex(b => b.id === lastId)
-    target = activePanel.bounds[index + dir]
+    const index = targets.findIndex(b => b.id === lastId)
+    target = targets[index + dir]
 
     if (target) {
       if (Selection.isTabs()) {
@@ -742,7 +761,7 @@ function onKeySelectExpand(dir: number): void {
   }
 
   // Update scroll position
-  if (target && activePanel.scrollEl) {
+  if (target && activePanel.scrollEl && target.start !== undefined && target.end !== undefined) {
     activePanel.scrollEl
     const h = activePanel.scrollEl.offsetHeight
     const s = activePanel.scrollEl.scrollTop

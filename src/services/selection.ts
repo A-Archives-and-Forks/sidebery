@@ -64,6 +64,16 @@ export function getTabsInfo(setPanelId?: boolean): ItemInfo[] {
   return Tabs.getTabsInfo(tabIds, setPanelId)
 }
 
+export function hasPinnedTabs() {
+  if (!selected.size) return undefined
+  return selected.values().some(tabId => Tabs.byId[tabId]?.pinned)
+}
+
+export function hasLockedPinnedTabs() {
+  if (!locked.size) return undefined
+  return locked.values().some(tabId => Tabs.byId[tabId]?.pinned)
+}
+
 export function toggleLocked() {
   if (normType === SelectionType.Nothing) return
   if (!normal.length) return
@@ -155,10 +165,8 @@ export function selectTab(tabId: ID): void {
   const target = Tabs.byId[tabId]
   if (!target) return
 
-  if (normFirst !== null) {
-    const firstTab = Tabs.byId[normFirst]
-    if (firstTab && firstTab.pinned !== target.pinned) return
-  }
+  const hasPinned = hasPinnedTabs()
+  if (hasPinned !== undefined && target.pinned !== hasPinned) return
 
   target.reactive.sel = target.sel = true
 

@@ -217,7 +217,13 @@ function onMouseDown(e: MouseEvent): void {
       if (!(tab.sel || tab.selLock)) {
         // Select active tab on initial ctrl-click, if setting enabled
         if (Settings.state.ctrlSelAct && !Selection.isSet()) {
-          Selection.selectTab(Tabs.activeId)
+          // Only if both active and current tab have the same
+          // pinned state, since sidebery doesn't support (yet)
+          // mixed selections.
+          const actTab = Tabs.byId[Tabs.activeId]
+          if (actTab && actTab.pinned === tab.pinned) {
+            Selection.selectTab(Tabs.activeId)
+          }
         }
         Selection.selectTab(tab.id)
       } else Selection.deselectTab(tab.id)
