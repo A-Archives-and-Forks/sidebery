@@ -1824,14 +1824,14 @@ export const commonTranslations: Translations = {
     ja: '他のタブを閉じる',
   },
   'menu.tab.duplicate_selection': {
-    en: 'Duplicate Selection',
-    de: 'Auswahl duplizieren',
-    hu: 'Kijelölés másolása',
-    pl: 'Powiel zaznaczenie',
-    ru: 'Дублировать выделенное',
-    zh_CN: '复制所选内容',
-    zh_TW: '複製所選內容',
-    ja: '選択を複製',
+    en: 'Deduplicate',
+    de: 'Deduplizieren',
+    hu: 'Deduplikáció',
+    pl: 'Deduplikuj',
+    ru: 'Дедуплицировать',
+    zh_CN: '重复数据删除',
+    zh_TW: '重複資料刪除',
+    ja: '重複排除',
   },
   // - Tabs panel
   'menu.tabs_panel.mute_all_audible': {
