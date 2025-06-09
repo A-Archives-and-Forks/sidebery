@@ -76,7 +76,7 @@ export function setTargetTab(tabId: ID, y: number) {
   state.targetTabId = tabId
 
   // Start timeout to...
-  if (!Menu.isOpen && !Mouse.multiSelectionMode && !Selection.selected.length) {
+  if (!Menu.isOpen && !Mouse.multiSelectionMode && !Selection.selected.size) {
     // Update default tooltip
     clearTimeout(tooltipUpdTimeout)
     tooltipUpdTimeout = setTimeout(() => {
