@@ -237,6 +237,30 @@ export const commonTranslations: Translations = {
     zh: '同步',
     ja: '同期',
   },
+  'sync.tabs_title': {
+    en: 'Tabs',
+    fr: 'Onglets',
+  },
+  'sync.settings_title': {
+    en: 'Settings',
+    fr: 'Paramètres',
+  },
+  'sync.style_title': {
+    en: 'Styles',
+    fr: 'Styles',
+  },
+  'sync.keybindings_title': {
+    en: 'Keybindings',
+    fr: 'Raccourcis',
+  },
+  'sync.ctx_menu_title': {
+    en: 'Context menu',
+    fr: 'Menu contextuel',
+  },
+  'sync.unknown_title': {
+    en: 'Unknown',
+    fr: 'Inconnu',
+  },
   'sync.err.google_entries': {
     en: 'Unable to load entries from Google Drive',
     de: 'Einträge aus Google Drive können nicht geladen werden',
@@ -313,6 +337,22 @@ export const commonTranslations: Translations = {
     zh_CN: '无法从同步存储中删除数据',
     zh_TW: '無法刪除同步資料',
     ja: '同期ストレージからデータを削除できません',
+  },
+  'sync.success.import_keyboard_success': {
+    en: 'Keybindings have been successfully imported',
+    fr: 'Les raccourcis ont été importés avec succès',
+  },
+  'sync.success.import_menu_success': {
+    en: 'Context menu has been successfully imported',
+    fr: 'Le menu contextuel a été importé avec succès',
+  },
+  'sync.success.import_settings_success': {
+    en: 'Settings have been successfully imported',
+    fr: 'Les paramètres ont été importés avec succès',
+  },
+  'sync.success.import_styles_success': {
+    en: 'Styles have been successfully imported',
+    fr: 'Les styles ont été importés avec succès',
   },
   'sync.unknown_profile': {
     en: 'Unknown profile',
@@ -695,6 +735,28 @@ export const commonTranslations: Translations = {
     zh_CN: '如果标签页在容器中',
     zh_TW: '如果分頁在容器中',
     ja: 'タブがコンテナ内にある場合',
+  },
+  'popup.tab_move_rules.rule_container_not_set': {
+    en: 'Not set',
+    de: 'Nicht festgelegt',
+    fr: 'Non défini',
+    hu: 'Nincs megadva',
+    pl: 'Nie ustawiono',
+    ru: 'Не задан',
+    zh_CN: '未设置',
+    zh_TW: '未設定',
+    ja: '未設定',
+  },
+  'popup.tab_move_rules.rule_container_not_set_tooltip': {
+    en: 'Not set',
+    de: 'Nicht festgelegt',
+    fr: 'Non défini',
+    hu: 'Nincs megadva',
+    pl: 'Nie ustawiono',
+    ru: 'Не задан',
+    zh_CN: '未设置',
+    zh_TW: '未設定',
+    ja: '未設定',
   },
   'popup.tab_move_rules.rule_url_label': {
     en: 'If tab has URL ("substring" or "/RegExp/")',
