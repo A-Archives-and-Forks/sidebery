@@ -64,7 +64,6 @@ async function main(): Promise<void> {
     notifyAboutNewSnapshot: Snapshots.notifyAboutNewSnapshot,
     notifyAboutWrongProxyAuthData: Notifications.notifyAboutWrongProxyAuthData,
     notify: Notifications.notify,
-    isDropEventConsumed: DnD.isDropEventConsumed,
     storageChanged: Store.storageChangeListener,
     connectTo: IPC.connectTo,
     getSearchQuery: Search.getSearchQuery,

@@ -50,7 +50,6 @@ export const DnD = {
     dragTooltipInfo: '',
   } as DragAndDropState,
 
-  dropEventConsumed: false,
   dropMode: 'auto' as 'auto' | 'copy',
   items: [] as DragItem[],
   isExternal: false,

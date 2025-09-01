@@ -43,7 +43,6 @@ export function start(info: DragInfo, dstType?: DropType): void {
     }
   }
 
-  DnD.dropEventConsumed = false
   DnD.srcType = info.type
   DnD.isExternal = info.windowId !== Windows.id
   DnD.items = info.items || []
@@ -61,8 +60,6 @@ export function start(info: DragInfo, dstType?: DropType): void {
   updateTooltip(info)
 
   DnD.reactive.isStarted = true
-
-  clearTimeout(dropEventWasConsumedTimeout)
 }
 
 function updateTooltip(info: DragInfo): void {
@@ -918,30 +915,10 @@ export function onDragMove(e: DragEvent): void {
   }
 }
 
-let dropEventWasConsumedTimeout: number | undefined
-
-/**
- * Temporary set DnD.dropEventConsumed to true.
- * It's needed to correctly handle dragEnd event.
- */
-function dropEventWasConsumed(): void {
-  DnD.dropEventConsumed = true
-  clearTimeout(dropEventWasConsumedTimeout)
-  dropEventWasConsumedTimeout = setTimeout(() => {
-    DnD.dropEventConsumed = false
-  }, 2000)
-}
-
-export function isDropEventConsumed(): boolean {
-  return DnD.dropEventConsumed
-}
-
 /**
  * Drop event handler
  */
 export async function onDrop(e: DragEvent): Promise<void> {
-  dropEventWasConsumed()
-
   if (e.ctrlKey) DnD.dropMode = 'copy'
 
   // Handle native firefox tabs
@@ -1272,33 +1249,18 @@ export async function onDragEnd(e: DragEvent): Promise<void> {
 
   if (e.ctrlKey) mode = 'copy'
 
+  const droppedOutside = e.x < 0 || e.x > Sidebar.width || e.y < 0 || e.y > Sidebar.height
+
   // Dropped outside sidebar
   if (
-    !DnD.dropEventConsumed &&
+    droppedOutside &&
     e.dataTransfer?.types.length === 1 &&
     Date.now() - lastDragStartTime > 250
   ) {
     const dndInfoStr = e.dataTransfer?.getData('application/x-sidebery-dnd')
 
-    // Check if the drop event was consumed by another sidebar
-    const requestingDropStatus: Promise<boolean>[] = []
-    for (const win of Windows.otherWindows) {
-      if (win.id) {
-        const gettingStatus = browser.sidebarAction.isOpen({ windowId: win.id }).then(isOpen => {
-          if (isOpen && win.id) return IPC.sidebar(win.id, 'isDropEventConsumed')
-          else return false
-        })
-        requestingDropStatus.push(gettingStatus)
-      }
-    }
-    let consumed
-    try {
-      consumed = await Utils.deadline(10000, [], Promise.all(requestingDropStatus))
-    } catch (err) {
-      Logs.err('DnD.onDragEnd: Cannot get drop status from other windows', err)
-      return
-    }
-    if (consumed?.includes(true)) return
+    // If the drop effect is not 'none' it was consumed by another drop target
+    if (e.dataTransfer?.dropEffect !== 'none') return
 
     // Parse transferred data
     if (!dndInfoStr) return
