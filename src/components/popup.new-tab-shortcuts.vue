@@ -128,7 +128,7 @@ const shortcuts = computed<NewTabShortcut[]>(() => {
       part = part.trim()
 
       // Url?
-      const domain = DOMAIN_RE.exec(part)?.[2]
+      const domain = DOMAIN_RE.exec(part)?.[1]
       if (domain) {
         shortcut.url = part
         const favicon = Favicons.reactive.byDomains[domain]

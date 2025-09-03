@@ -229,7 +229,7 @@ export function dateTimeTemplate(str: string, msOrDate: number | Date): string {
  */
 export function getDomainOf(url: string): string {
   if (!url) return url
-  return DOMAIN_RE.exec(url)?.[2] ?? url
+  return DOMAIN_RE.exec(url)?.[1] ?? url
 }
 
 /**
