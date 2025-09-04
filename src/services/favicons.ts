@@ -6,7 +6,8 @@ import * as Logs from 'src/services/logs'
 export const MAX_COUNT_LIMIT = 2000
 export const SHARD_SIZE = 400
 export const MAX_IMG_SIZE = 234_567
-export const MAX_SVG_IMG_SIZE = 10_000
+export const MAX_SVG_IMG_SIZE = 5_000
+export const MAX_SVG_IMG_WITH_MEDIA_QUERY_SIZE = 10_000
 
 export async function loadFaviconsData() {
   const keys: (keyof Stored)[] = [
@@ -56,10 +57,16 @@ let favRescaleImg: HTMLImageElement | undefined
 export async function resizeFavicon(fav: DataUriImage): Promise<DataUriImage> {
   const favIsSVG = Utils.isSvg(fav)
 
-  // Image is svg
+  // Favicon is svg
   if (favIsSVG) {
-    // Skip resize if fav is a SVG containing CSS Media Queries
-    if (fav.length <= MAX_SVG_IMG_SIZE && Utils.svgImageContainsCssMediaQueries(fav)) {
+    // Skip resizing of small enough SVGs
+    if (fav.length <= MAX_SVG_IMG_SIZE) return fav
+
+    // Skip resize if SVG is small enough and contains CSS Media Queries
+    if (
+      fav.length <= MAX_SVG_IMG_WITH_MEDIA_QUERY_SIZE &&
+      Utils.svgImageContainsCssMediaQueries(fav)
+    ) {
       return fav
     }
   }
