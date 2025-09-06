@@ -62,10 +62,13 @@ function waitForOtherReopenedTabs(tab: Tab): void {
   // Get session data of probably reopened tab
   // to check if it was actually reopened
   browser.sessions
-    .getTabValue(tab.id, 'data')
+    .getTabValue<TabSessionData>(tab.id, 'data')
     .then(data => {
       tab.reopened = !!data
+
+      // It's too late
       if (!waitForOtherReopenedTabsBuffer) return
+
       waitForOtherReopenedTabsCheckLen--
       if (waitForOtherReopenedTabsCheckLen <= 0) {
         clearTimeout(waitForOtherReopenedTabsTimeout)
@@ -434,6 +437,10 @@ function onTabCreated(nativeTab: NativeTab, attached?: boolean): void {
   }
   if (!attached && !Settings.state.autoExpandTabsOnNew && Tabs.byId[tab.parentId]?.folded) {
     tab.invisible = true
+  }
+  if (reopenedTabInfo?.customTitle) tab.customTitle = reopenedTabInfo.customTitle
+  if (reopenedTabInfo?.customColor) {
+    tab.reactive.customColor = tab.customColor = reopenedTabInfo.customColor
   }
 
   // Check if tab should be reopened in different container
@@ -1040,6 +1047,8 @@ function onTabRemoved(tabId: ID, info: browser.tabs.RemoveInfo, detached?: boole
       title: tab.title,
       parentId: recentlyRemovedChildParentMap?.[tab.id] ?? tab.parentId,
       panelId: tab.panelId,
+      customTitle: tab.customTitle,
+      customColor: tab.customColor,
     }
     Tabs.removedTabs.unshift(removedTabInfo)
     if (Tabs.removedTabs.length > 64) {

@@ -218,6 +218,8 @@ export interface RemovedTabInfo {
   parentId: ID
   panelId: ID
   children?: ID[]
+  customTitle?: string
+  customColor?: string
 }
 
 export interface RecentlyClosedTabInfo {
