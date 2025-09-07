@@ -989,7 +989,7 @@ export function switchTabWithPreselect(globaly: boolean, cycle: boolean, dir: 1 
   const selIsSet = Selection.isSet()
   let target: Tab | undefined
 
-  if (Settings.state.selectActiveTabFirst && !selIsSet) {
+  if (Settings.state.scrollThroughTabsPreselAct && !selIsSet) {
     target = Tabs.byId[Tabs.activeId]
     const wrongPanel =
       target &&

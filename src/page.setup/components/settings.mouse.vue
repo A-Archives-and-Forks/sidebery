@@ -52,6 +52,11 @@ section(ref="el")
       :allowNegative="true"
       :note="translate('settings.scroll_through_tabs_scroll_area_note')"
       @update:value="Settings.saveDebounced(500)")
+    ToggleField(
+      label="settings.select_active_tab_first"
+      v-model:value="Settings.state.scrollThroughTabsPreselAct"
+      :inactive="!Settings.state.scrollThroughTabs.startsWith('ps')"
+      @update:value="Settings.saveDebounced(150)")
   ToggleField(
     label="settings.auto_menu_multi_sel"
     v-model:value="Settings.state.autoMenuMultiSel"

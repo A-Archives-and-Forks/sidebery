@@ -217,6 +217,7 @@ export interface SettingsState {
   scrollThroughTabsExceptOverflow: boolean
   scrollThroughTabsCyclic: boolean
   scrollThroughTabsScrollArea: number
+  scrollThroughTabsPreselAct: boolean
   scrollThroughTabsPreselDelay: number
   autoMenuMultiSel: boolean
   multipleMiddleClose: boolean
