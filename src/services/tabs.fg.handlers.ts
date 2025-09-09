@@ -1624,6 +1624,11 @@ function onTabActivated(info: browser.tabs.ActiveInfo): void {
     } else Tabs.scrollToTabDebounced(3, tab.id, true)
   }
 
+  // Close in-page preview
+  if (Preview.state.status === Preview.Status.Open && Preview.state.mode === Preview.Mode.InPage) {
+    Preview.closePreview()
+  }
+
   // Reset fallback preview mode
   if (Settings.state.previewTabs && Preview.state.modeFallback) {
     Preview.resetMode()
