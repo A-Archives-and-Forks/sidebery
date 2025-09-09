@@ -163,6 +163,11 @@
   &[data-unloaded="true"] > *
     opacity: .3
 
+// Remove border radius for the last item in vertical navbar.
+.NavigationBar&.-vert .nav-item:last-of-type
+  border-bottom-left-radius: 0
+  border-bottom-right-radius: 0
+
 .NavigationBar .hidden-panels-popup .nav-item
   width: auto
   border-radius: var(--nav-hidden-btn-border-radius)
