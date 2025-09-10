@@ -237,7 +237,7 @@ watch(isActive, (c, p) => {
   // Deactivation
   if (!c && p && !state.unrendered) {
     deactivationTimeout = setTimeout(() => {
-      if (scrollBoxEl?.scrollTop) {
+      if (scrollBoxEl?.scrollTop !== undefined) {
         Sidebar.scrollPositions[props.panel.id] = scrollBoxEl?.scrollTop
       }
       state.unrendered = true
