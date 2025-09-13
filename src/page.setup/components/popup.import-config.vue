@@ -666,6 +666,7 @@ async function importFavicons(backup: BackupData): Promise<void> {
   })
 
   // Reload favicons in all runned instances
+  SetupPage.calcStorageInfo()
   Favicons.loadFavicons()
   IPC.broadcast({ action: 'reloadFavicons' })
 }
