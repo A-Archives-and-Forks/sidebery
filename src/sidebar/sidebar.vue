@@ -23,6 +23,7 @@
   :data-sticky-bookmarks="Settings.state.pinOpenedBookmarksFolder"
   :data-colorized-branches="Settings.state.colorizeTabsBranches"
   :data-syncing="Sync.reactive.syncing"
+  :data-new-tab-btns="Settings.state.showNewTabBtns"
   @dragend="DnD.onDragEnd"
   @dragenter="DnD.onDragEnter"
   @dragleave="DnD.onDragLeave"
