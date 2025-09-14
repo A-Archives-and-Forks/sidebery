@@ -4,7 +4,7 @@ import { NOID, CONTAINER_ID, GROUP_URL, TABS_PANEL_CONFIG } from 'src/defaults'
 import { URL_URL, GROUP_URL_LEN, URL_URL_LEN } from 'src/defaults'
 import { Snapshot, SnapTab, NormalizedSnapshot, SnapExportTypes, SnapExportInfo } from 'src/types'
 import { RemovingSnapshotResult, SnapPanelState, SnapStoreMode, SnapTabState } from 'src/types'
-import { Stored, Notification, SnapWindowState, SnapshotState } from 'src/types'
+import { Stored, Notification, SnapWindowState, SnapshotState, Container } from 'src/types'
 import * as Logs from 'src/services/logs'
 import { Settings } from 'src/services/settings'
 import { Windows } from 'src/services/windows'
@@ -15,7 +15,7 @@ import { Notifications } from 'src/services/notifications'
 import * as IPC from './ipc'
 import * as Favicons from './favicons'
 import { Containers } from './containers'
-import { DEFAULT_CONTAINER_ID } from 'src/defaults/containers'
+import { DEFAULT_CONTAINER_ID, PRIVATE_CONTAINER_ID } from 'src/defaults/containers'
 import { PanelType } from 'src/types/sidebar'
 import { ItemInfo } from 'src/types/tabs'
 import { Info } from './info'
@@ -443,6 +443,41 @@ async function getLastSnapTimeElapsed(): Promise<number> {
   const elapsed = now - lastSnapTime
   if (elapsed < 0) return 0
   return elapsed
+}
+
+export async function adaptContainer(
+  snapshot: SnapshotState,
+  containerId: string
+): Promise<string> {
+  if (containerId === DEFAULT_CONTAINER_ID || containerId === PRIVATE_CONTAINER_ID) {
+    return containerId
+  }
+
+  const snapContainer: Container | undefined = snapshot.containers[containerId]
+  const matchedLocalContainer = Containers.findUnique({
+    name: snapContainer.name,
+    color: snapContainer.color,
+    icon: snapContainer.icon,
+  })
+  if (matchedLocalContainer) {
+    return matchedLocalContainer.id
+  }
+
+  // Create new container
+  const newContainer = await Containers.create(
+    snapContainer.name,
+    snapContainer.color,
+    snapContainer.icon
+  )
+  newContainer.proxified = snapContainer.proxified
+  newContainer.proxy = Utils.clone(snapContainer.proxy)
+  newContainer.reopenRulesActive = snapContainer.reopenRulesActive
+  newContainer.reopenRules = Utils.clone(snapContainer.reopenRules)
+  newContainer.userAgentActive = snapContainer.userAgentActive
+  newContainer.userAgent = snapContainer.userAgent
+  await Containers.saveContainers()
+
+  return newContainer.id
 }
 
 async function adaptContainers(snapshot: NormalizedSnapshot): Promise<void> {

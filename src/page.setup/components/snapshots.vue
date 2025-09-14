@@ -68,6 +68,7 @@
                     :index="i"
                     :tab="tab"
                     :panel="panel"
+                    :snapshot="state.activeSnapshot"
                     :viewerState="state")
       .selection-bar(:data-active="!!selectedTabsLen")
         .info {{translate('snapshot.selected')}} {{selectedTabsLen}}
@@ -262,7 +263,10 @@ async function openSelectedTabs(how: SnapOpenType): Promise<void> {
           customTitle: tab.customTitle,
           customColor: tab.customColor,
           title: tab.title,
-          container: tab.containerId ?? CONTAINER_ID,
+          container: await Snapshots.adaptContainer(
+            state.activeSnapshot,
+            tab.containerId ?? CONTAINER_ID
+          ),
         }
         if (tab.lvl && tab.lvl > 0) {
           let shift = 1

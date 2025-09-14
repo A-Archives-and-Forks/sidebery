@@ -55,6 +55,7 @@ interface SnapTabProps {
   tab: SnapTabState
   panel: SnapPanelState
   viewerState: SnapshotsViewerState
+  snapshot: SnapshotState
 }
 
 const props = defineProps<SnapTabProps>()
@@ -157,7 +158,7 @@ async function openTab(tab: SnapTabState): Promise<void> {
       customTitle: tab.customTitle,
       customColor: tab.customColor,
       title: tab.title,
-      container: tab.containerId ?? CONTAINER_ID,
+      container: await Snapshots.adaptContainer(props.snapshot, tab.containerId ?? CONTAINER_ID),
     }
     if (Utils.isTabsPanel(activePanel)) {
       await IPC.sidebar(Windows.id, 'openTabs', [item], { panelId: activePanel.id })
