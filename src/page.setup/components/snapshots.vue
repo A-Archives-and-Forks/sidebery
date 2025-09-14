@@ -293,7 +293,7 @@ async function openSelectedTabs(how: SnapOpenType): Promise<void> {
           url: Utils.normalizeUrl(item.url, item.title),
           windowId: Windows.id,
           active: false,
-          cookieStoreId: item.container, // TODO: find/create container
+          cookieStoreId: item.container,
         }
         if (conf.url && !conf.url.startsWith('a') && item.title) {
           conf.discarded = true
