@@ -253,9 +253,7 @@ export function unload(): void {
   Tabs.activeId = -1
 
   Sidebar.recalcTabsPanels()
-  Logs.info('unload: panels after recalc:', Utils.clone(Sidebar.panels))
   Sidebar.recalcVisibleTabs()
-  Logs.info('unload: panels after recalc visible tabs:', Utils.clone(Sidebar.panels))
 }
 
 export function reloadInShadowMode() {
