@@ -1017,7 +1017,7 @@ async function updateSidebar(newConfig?: SidebarConfig): Promise<void> {
   if (Settings.state.updateSidebarTitle) updateSidebarTitle()
 
   if (!prevHasTabsPanels && Sidebar.hasTabs) Tabs.load()
-  else if (prevHasTabsPanels && !Sidebar.hasTabs) Tabs.unload()
+  else if (prevHasTabsPanels && !Sidebar.hasTabs) Tabs.reloadInShadowMode()
 
   if (!prevHasBookmarksPanels && Sidebar.hasBookmarks) Bookmarks.load()
   else if (prevHasBookmarksPanels && !Sidebar.hasBookmarks) Bookmarks.unload()
@@ -1679,7 +1679,7 @@ export async function removePanel(panelId: ID, conf?: RemovingPanelConf): Promis
     if (newPanelIdForTabs) recalcVisibleTabs(newPanelIdForTabs)
   }
 
-  if (Utils.isTabsPanel(panel) && !Sidebar.hasTabs) Tabs.unload()
+  if (Utils.isTabsPanel(panel) && !Sidebar.hasTabs) Tabs.reloadInShadowMode()
   if (Utils.isBookmarksPanel(panel) && !Sidebar.hasBookmarks) Bookmarks.unload()
   if (Utils.isHistoryPanel(panel) && !Sidebar.hasHistory) History.unload()
   if (Utils.isSyncPanel(panel) && !Sidebar.hasSync) Sync.unload()

@@ -219,20 +219,30 @@ export async function load(): Promise<void> {
 export function unload(): void {
   Tabs.ready = false
   Tabs.resetTabsListeners()
+  Tabs.resetSaveTabDataTimeouts()
+  Tabs.resetCacheTabsDataTimeout()
 
   Tabs.reactive.pinnedIds = []
   Tabs.reactive.recentlyRemovedLen = 0
-  Tabs.recentlyRemoved = []
+  Tabs.reactive.inlinePreviewTabId = NOID
+  Tabs.reactive.inlinePreviewPinnedImg = ''
   Tabs.list = []
   Tabs.byId = {}
+  Tabs.pinned = []
+  Tabs.recentlyRemoved = []
+
   Tabs.urlsInUse = {}
+  Tabs.shadowMode = false
+  Tabs.shadowReady = false
 
   Tabs.tabsReinitializing = false
   Tabs.removedTabs = []
   Tabs.newTabsPosition = {}
   Tabs.movingTabs = []
   Tabs.attachingTabs = []
+  Tabs.detachingTabIds = new Set<ID>()
   Tabs.normTabsMoving = false
+  Tabs.editableTabId = NOID
 
   Tabs.activeTabsGlobal.actTabOffset = -1
   Tabs.activeTabsGlobal.actTabs = []
@@ -242,18 +252,14 @@ export function unload(): void {
   Tabs.ignoreTabsEvents = false
   Tabs.activeId = -1
 
-  for (const panel of Sidebar.panels) {
-    if (Utils.isTabsPanel(panel)) {
-      panel.tabs = []
-      panel.pinnedTabs = []
-      panel.reactive.visibleTabIds = []
-      panel.reactive.pinnedTabIds = []
-      panel.reactive.len = 0
-      panel.reactive.empty = true
-      panel.ready = false
-    }
-  }
+  Sidebar.recalcTabsPanels()
+  Logs.info('unload: panels after recalc:', Utils.clone(Sidebar.panels))
+  Sidebar.recalcVisibleTabs()
+  Logs.info('unload: panels after recalc visible tabs:', Utils.clone(Sidebar.panels))
+}
 
+export function reloadInShadowMode() {
+  unload()
   Tabs.loadInShadowMode()
 }
 
@@ -691,6 +697,10 @@ export function cacheTabsData(delay = 300): void {
 }
 let cacheTabsDataTimeout: number | undefined
 
+export function resetCacheTabsDataTimeout() {
+  clearTimeout(cacheTabsDataTimeout)
+}
+
 const saveTabDataTimeouts = new Map<ID, number>()
 
 /**
@@ -712,6 +722,12 @@ export function saveTabData(tabId: ID, forced?: boolean, delay?: number): void {
   } else {
     saveTabDataTimeouts.delete(tabId)
     _saveTabData(tabId, forced)
+  }
+}
+
+export function resetSaveTabDataTimeouts() {
+  for (const [_, timeout] of saveTabDataTimeouts) {
+    clearTimeout(timeout)
   }
 }
 
