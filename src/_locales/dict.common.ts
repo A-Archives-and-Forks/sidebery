@@ -1046,6 +1046,22 @@ export const commonTranslations: Translations = {
     zh_TW: '建立快照',
     ja: 'スナップショットを作成',
   },
+  'menu.browserAction.reopen_cached_win_first': {
+    en: tabsCount => {
+      if (tabsCount === 1) return `Reopen cached window (${tabsCount} tab)`
+      return `Reopen cached window (${tabsCount} tabs)`
+    },
+  },
+  'menu.browserAction.reopen_cached_wins': {
+    en: 'Reopen cached window',
+  },
+  'menu.browserAction.reopen_cached_win': {
+    en: (tabsCount, panelsCount) => {
+      const t = tabsCount === 1 ? 'tab' : 'tabs'
+      const p = panelsCount === 1 ? 'panel' : 'panels'
+      return `${tabsCount} ${t} in ${panelsCount} ${p}`
+    },
+  },
   // - New tab bar
   'menu.new_tab_bar.no_container': {
     en: 'No Container',

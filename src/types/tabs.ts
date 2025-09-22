@@ -101,6 +101,7 @@ export interface TabCache {
   folded?: boolean
   ctx?: string /* only for containered tab */
   uniqWinId?: ID /* only for the first tab of window */
+  privWin?: boolean /* only for the first tab of private window */
   customTitle?: string
   customColor?: string
 

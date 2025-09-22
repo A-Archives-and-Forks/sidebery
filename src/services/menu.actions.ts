@@ -20,6 +20,7 @@ import { Search } from 'src/services/search'
 import * as Preview from 'src/services/tabs.preview'
 import { Logs, Sync } from './_services'
 import { Notifications } from './notifications'
+import { Tabs as TabsBg } from './tabs.bg'
 
 export type OpenCallback = (blocks: MenuBlock[], x?: number, y?: number) => void
 
@@ -91,6 +92,11 @@ export async function importCtxMenu(ctxMenu: MenuConfs) {
   Menu.setCtxMenu(ctxMenu)
 }
 
+export function createBrowserActionMenu() {
+  createSettingsMenu()
+  TabsBg.createReopenFromCacheMenu()
+}
+
 export function createSettingsMenu(): void {
   browser.menus.create({
     id: 'open_settings',
@@ -114,7 +120,7 @@ function onMenuHiddenFg(): void {
 
 function onMenuHiddenBg(): void {
   browser.menus.removeAll()
-  createSettingsMenu()
+  createBrowserActionMenu()
 }
 
 export function setCtxMenu(conf?: MenuConfs) {

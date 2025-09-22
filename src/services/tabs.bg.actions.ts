@@ -1,5 +1,5 @@
 import { Tab, Window, TabCache, TabsTreeData, GroupInfo, AnyFunc, DstPlaceInfo } from 'src/types'
-import { InstanceType, TabTreeData, ItemInfo } from 'src/types'
+import { InstanceType, TabTreeData, ItemInfo, Stored } from 'src/types'
 import * as Utils from 'src/utils'
 import { ADDON_HOST, GROUP_INITIAL_TITLE, GROUP_URL, NOID, SAMEID } from 'src/defaults'
 import { URL_URL, SETTINGS_OPTIONS } from 'src/defaults'
@@ -14,12 +14,22 @@ import { Settings } from './settings'
 import * as Logs from './logs'
 import { ParsedTheme, Styles } from './styles'
 import { DetachedTabsInfo } from './tabs.fg.move'
+import { translate } from 'src/dict'
+
+let _tabsDataCache: TabCache[][] | undefined
 
 /**
  * Load tabs
  */
 export async function loadTabs(): Promise<void> {
-  const tabs = await browser.tabs.query({})
+  const [tabs, storage] = await Promise.all([
+    browser.tabs.query({}).catch(() => []),
+    _tabsDataCache
+      ? undefined
+      : browser.storage.local.get<Stored>('tabsDataCache').catch(() => ({}) as Stored),
+  ])
+  if (!_tabsDataCache) _tabsDataCache = storage?.tabsDataCache
+
   for (const tab of tabs as Tab[]) {
     const tabWindow = Windows.byId[tab.windowId]
     if (!tabWindow) continue
@@ -65,6 +75,76 @@ export async function reinitTabs(msg: string) {
     win.tabs = []
   }
   await loadTabs()
+}
+
+export function createReopenFromCacheMenu() {
+  // No cache
+  if (!_tabsDataCache) return
+
+  // One window
+  if (_tabsDataCache.length === 1) {
+    const winCache = _tabsDataCache[0]
+    if (!winCache) return
+
+    browser.menus.create({
+      id: 'reopen_cached_win',
+      title: translate('menu.browserAction.reopen_cached_win_first', winCache.length),
+      icons: { '16': 'assets/undo-native.svg' },
+      onclick: () => reopenCachedWindow(winCache),
+      contexts: ['browser_action'],
+    })
+  }
+
+  // Multiple windows
+  else {
+    const parentId = browser.menus.create({
+      id: 'reopen_cached_wins',
+      title: translate('menu.browserAction.reopen_cached_wins'),
+      icons: { '16': 'assets/undo-native.svg' },
+      contexts: ['browser_action'],
+    })
+
+    for (let i = 0; i < _tabsDataCache.length; i++) {
+      const winCache = _tabsDataCache[i]
+      if (!winCache) continue
+
+      const panelIds = new Set()
+      for (const tab of winCache) {
+        panelIds.add(tab.panelId)
+      }
+
+      const incognito = !!winCache[0]?.privWin
+      const icon = incognito ? 'assets/private-window-native.svg' : 'assets/window-native.svg'
+
+      browser.menus.create({
+        id: `reopen_cached_win_${i}`,
+        parentId,
+        title: translate('menu.browserAction.reopen_cached_win', winCache.length, panelIds.size),
+        icons: { '16': icon },
+        onclick: () => reopenCachedWindow(winCache),
+        contexts: ['browser_action'],
+      })
+    }
+  }
+}
+
+function reopenCachedWindow(cache: TabCache[]) {
+  const incognito = !!cache[0]?.privWin
+  const items: ItemInfo[] = []
+  for (const cachedTab of cache) {
+    items.push({
+      id: cachedTab.id,
+      url: cachedTab.url,
+      title: cachedTab.customTitle ?? cachedTab.url,
+      parentId: cachedTab.parentId ?? NOID,
+      panelId: cachedTab.panelId ?? NOID,
+      pinned: !!cachedTab.pin,
+      customColor: cachedTab.customColor,
+      customTitle: cachedTab.customTitle,
+      folded: !!cachedTab.folded,
+    })
+  }
+  Windows.createWithTabs(items, { incognito })
 }
 
 /**

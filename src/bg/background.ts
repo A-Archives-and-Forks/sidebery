@@ -121,7 +121,7 @@ void (async function main() {
 })()
 
 function initToolbarButton(): void {
-  Menu.createSettingsMenu()
+  Menu.createBrowserActionMenu()
 
   browser.browserAction.onClicked.addListener((_, info): void => {
     if (info && info.button === 1) browser.runtime.openOptionsPage()
