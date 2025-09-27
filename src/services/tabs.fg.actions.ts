@@ -135,12 +135,12 @@ export function getStatus(tab: Tab): TabStatus {
   return TabStatus.Complete
 }
 
-let waitingForTabs: (() => void)[] = []
+let waitingForTabsReadiness: (() => void)[] = []
 export async function waitForTabsReady(): Promise<void> {
   if (Tabs.ready) return
 
   return new Promise(ok => {
-    waitingForTabs.push(ok)
+    waitingForTabsReadiness.push(ok)
   })
 }
 
@@ -213,8 +213,8 @@ export async function load(src?: LoadSrc): Promise<void> {
   Tabs.deferredEventHandling.forEach(cb => cb())
   Tabs.deferredEventHandling = []
 
-  waitingForTabs.forEach(cb => cb())
-  waitingForTabs = []
+  waitingForTabsReadiness.forEach(cb => cb())
+  waitingForTabsReadiness = []
 
   Logs.info(`Tabs.load: Done: ${performance.now() - ts}ms`)
 }
