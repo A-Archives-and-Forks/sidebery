@@ -1120,7 +1120,7 @@ export class AsyncQueue {
   }
 }
 
-export const GLOBAL_QUEUE = new AsyncQueue()
+export const GLOBAL_QUEUE = /* @__PURE__ */ new AsyncQueue()
 
 export function getRandomFrom<T>(arr: T[]): T {
   const index = Math.round(Math.random() * (arr.length - 1))
