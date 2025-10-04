@@ -346,12 +346,12 @@ function isContainerChanged(): boolean {
 
   // Check if dst panel have dropTabCtx rule
   const dstPanel = Sidebar.panelsById[DnD.reactive.dstPanelId]
-  let destContainer
-  if (Utils.isTabsPanel(dstPanel)) destContainer = dstPanel.dropTabCtx
-  if (!destContainer) return false
+  let dstContainer
+  if (Utils.isTabsPanel(dstPanel)) dstContainer = dstPanel.dropTabCtx
+  if (!dstContainer) return false
 
-  const isDstDefaultContainer = destContainer === CONTAINER_ID
-  const isDstContainerExists = isDstDefaultContainer || Containers.reactive.byId[destContainer]
+  const isDstDefaultContainer = dstContainer === CONTAINER_ID
+  const isDstContainerExists = isDstDefaultContainer || !!Containers.reactive.byId[dstContainer]
   if (!isDstContainerExists) return false
 
   // Preserve container for globally pinned tabs
@@ -359,7 +359,7 @@ function isContainerChanged(): boolean {
 
   // Check tabs
   for (const item of DnD.items) {
-    if (item.container !== destContainer) return true
+    if (item.container !== dstContainer) return true
   }
   return false
 }
