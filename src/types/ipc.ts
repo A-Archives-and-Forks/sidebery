@@ -91,7 +91,7 @@ export type SidebarActions = {
   getActivePanelConfig: () => PanelConfig | undefined
   stopDrag: () => void
   getGroupInfo: (groupTabId: ID) => Promise<GroupInfo | null>
-  handleReopening: (tabId: ID, dstContainerId?: string) => number | undefined
+  handleReopening: (tabId: ID, dstContainerId?: string) => Promise<number | undefined>
 
   loadFavicons: () => void
   reloadFavicons: () => any
