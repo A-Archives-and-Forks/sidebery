@@ -330,6 +330,9 @@ export async function reopen(
   // Remove source tabs
   Tabs.removingTabs = [...ids]
   await browser.tabs.remove(ids)
+  if (Tabs.removingTabs.length) {
+    ids.forEach(rmId => Utils.rmFromArray(Tabs.removingTabs, rmId))
+  }
 
   // Fix tree
   let treeUpdateNeeded = false
