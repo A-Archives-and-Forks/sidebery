@@ -67,23 +67,6 @@ export function saveCustomTitle(tabId: ID) {
   Tabs.cacheTabsData()
 }
 
-export function onOutsideEditingInput(value: string) {
-  if (!Windows.focused) return
-
-  const tab = Tabs.byId[Tabs.editableTabId]
-  if (!tab) return
-
-  if (!inputEl) {
-    const selector = `#tab${Tabs.editableTabId}` + ' .custom-title-input'
-    inputEl = document.querySelector(selector) as HTMLInputElement | null
-  }
-  if (!inputEl) return
-
-  inputEl.value = value
-  tab.customTitle = value
-  Tabs.renderTitle(tab)
-}
-
 export function onOutsideEditingEnter() {
   IPC.sendToEditingPopup(Windows.id, 'closePopup')
 
@@ -133,4 +116,21 @@ export function getEditingValue() {
   if (!tab) return ''
 
   return tab.customTitle ?? tab.title
+}
+
+export function setEditingValue(value: string) {
+  if (!Windows.focused) return
+
+  const tab = Tabs.byId[Tabs.editableTabId]
+  if (!tab) return
+
+  if (!inputEl) {
+    const selector = `#tab${Tabs.editableTabId}` + ' .custom-title-input'
+    inputEl = document.querySelector(selector) as HTMLInputElement | null
+  }
+  if (!inputEl) return
+
+  inputEl.value = value
+  tab.customTitle = value
+  Tabs.renderTitle(tab)
 }

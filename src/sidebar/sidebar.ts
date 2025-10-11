@@ -60,7 +60,7 @@ async function main(): Promise<void> {
     onOutsideSearchExit: Search.onOutsideSearchExit,
     onOutsideSearchBookmarks: Search.bookmarks,
     onOutsideSearchHistory: Search.history,
-    onOutsideEditingInput: Tabs.onOutsideEditingInput,
+    onOutsideEditingInput: Tabs.setEditingValue,
     onOutsideEditingEnter: Tabs.onOutsideEditingEnter,
     onOutsideEditingExit: Tabs.onOutsideEditingExit,
     notifyAboutNewSnapshot: Snapshots.notifyAboutNewSnapshot,
