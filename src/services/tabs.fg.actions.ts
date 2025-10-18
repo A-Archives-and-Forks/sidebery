@@ -1195,7 +1195,7 @@ export async function discardTabs(tabIds: ID[] = []): Promise<void> {
   }
 
   // Update succession for active tab to prevent switching to discarded tabs
-  const activeTab = Tabs.byId[Tabs.activeId]
+  let activeTab = Tabs.byId[Tabs.activeId]
   if (activeTab) {
     const target = findSuccessorTab(activeTab, tabIds)
 
@@ -1203,6 +1203,7 @@ export async function discardTabs(tabIds: ID[] = []): Promise<void> {
       // If active tab will be discraded activate another
       if (tabIds.includes(Tabs.activeId)) {
         await browser.tabs.update(target.id, { active: true })
+        activeTab = target
       } else if (activeTab.successorTabId !== target.id) {
         browser.tabs.moveInSuccession([activeTab.id], target.id).catch(err => {
           Logs.err('Tabs.discardTabs: Cannot update succession:', err)
@@ -1210,6 +1211,15 @@ export async function discardTabs(tabIds: ID[] = []): Promise<void> {
         activeTab.successorTabId = target.id
       }
     }
+  }
+
+  // Reset highlighing of the native tabs.
+  // This is a workaround for the issue when Firefox doesn't update the highlighting
+  // for the already hidden tabs. Not sure if this is a bug or norm though.
+  if (Settings.state.nativeHighlight && Settings.state.hideUnloadedTabs && activeTab) {
+    browser.tabs
+      .highlight({ windowId: Windows.id, populate: false, tabs: [activeTab.index] })
+      .catch(() => {})
   }
 
   // Try to discard tabs
