@@ -1779,8 +1779,9 @@ export function expTabsBranch(rootTabId: ID, noRecursive?: boolean, noAutoFold?:
   const hideFolded = Settings.state.hideFoldedTabs
   const hideFoldedParent = hideFolded && Settings.state.hideFoldedParent === 'any'
   const hideFoldedGroup = hideFolded && Settings.state.hideFoldedParent === 'group'
-  const toShow: ID[] = []
+  const hideUnloaded = Settings.state.hideUnloadedTabs
   const preserve: ID[] = []
+  let toShow: ID[] = []
   let autoFold: Tab[] = []
 
   const rootTab = Tabs.byId[rootTabId]
@@ -1847,12 +1848,13 @@ export function expTabsBranch(rootTabId: ID, noRecursive?: boolean, noAutoFold?:
 
   // Show the parent tab when expanding the group
   if (hideFolded && (hideFoldedParent || (hideFoldedGroup && rootTab.isGroup))) {
-    browser.tabs.show?.(rootTabId).catch(err => {
-      Logs.err('Tabs.expTabsBranch: Cannot show parent tab:', err)
-    })
+    toShow.unshift(rootTabId)
   }
 
   if (hideFolded && toShow.length) {
+    // Skip unloaded tabs if needed
+    if (hideUnloaded) toShow = toShow.filter(id => !Tabs.byId[id]?.discarded)
+
     browser.tabs.show?.(toShow).catch(err => {
       Logs.err('Tabs.expTabsBranch: Cannot show tabs:', err)
     })
