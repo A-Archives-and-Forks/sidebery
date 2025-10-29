@@ -2,7 +2,6 @@ import { SETTINGS_OPTIONS } from '../defaults'
 
 export interface SettingsState {
   // General
-  version?: string // DEPR
   nativeScrollbars: boolean
   nativeScrollbarsThin: boolean
   nativeScrollbarsLeft: boolean
@@ -25,8 +24,6 @@ export interface SettingsState {
   navBarLayout: (typeof SETTINGS_OPTIONS.navBarLayout)[number]
   navBarInline: boolean
   navBarSide: (typeof SETTINGS_OPTIONS.navBarSide)[number]
-  hideAddBtn: boolean // DEPR
-  hideSettingsBtn: boolean // DEPR
   navBtnCount: boolean
   skipEmptyPanels: boolean
   hideEmptyPanels: boolean
@@ -169,7 +166,6 @@ export interface SettingsState {
   nativeHighlight: boolean
 
   // Bookmarks
-  bookmarksPanel?: boolean // DEPR
   warnOnMultiBookmarkDelete: (typeof SETTINGS_OPTIONS.warnOnMultiBookmarkDelete)[number]
   askNewBookmarkPlace: boolean
   autoCloseBookmarks: boolean
@@ -188,13 +184,11 @@ export interface SettingsState {
   // Appearance
   fontSize: (typeof SETTINGS_OPTIONS.fontSize)[number]
   fontFamily: string
-  bgNoise?: boolean // DEPR
   animations: boolean
   animationSpeed: (typeof SETTINGS_OPTIONS.animationSpeed)[number]
   theme: (typeof SETTINGS_OPTIONS.theme)[number]
   density: (typeof SETTINGS_OPTIONS.density)[number]
   colorScheme: (typeof SETTINGS_OPTIONS.colorScheme)[number]
-  style?: string // DEPR
 
   // Snapshots
   snapNotify: boolean
@@ -209,7 +203,6 @@ export interface SettingsState {
   snapMdFullTree: boolean
 
   // Mouse
-  hScrollThroughPanels?: boolean // DEPR
   hScrollAction: (typeof SETTINGS_OPTIONS.hScrollAction)[number]
   onePanelSwitchPerScroll: boolean
   wheelAccumulationX: boolean

@@ -24,8 +24,6 @@ export const DEFAULT_SETTINGS: SettingsState = {
   navBarLayout: 'horizontal',
   navBarInline: true,
   navBarSide: 'left',
-  hideAddBtn: false,
-  hideSettingsBtn: false,
   navBtnCount: true,
   hideEmptyPanels: true,
   hideDiscardedTabPanels: false,
