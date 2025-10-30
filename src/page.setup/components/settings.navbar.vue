@@ -60,7 +60,7 @@ section(
       v-model:value="Settings.state.subPanelHistory"
       @update:value="Settings.saveDebounced(150)")
     ToggleField(
-      label="Sync sub-panel"
+      label="settings.sub_panel.sync"
       v-model:value="Settings.state.subPanelSync"
       @update:value="Settings.saveDebounced(150)")
 

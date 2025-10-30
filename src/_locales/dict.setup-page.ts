@@ -1181,9 +1181,14 @@ Liste de “sous-chaines” ou “/RegExp/” avec une entrée par ligne:
   },
   'settings.copy_templates': {
     en: 'Copy by templates',
+    de: 'Kopieren nach Vorlagen',
     fr: 'Copier avec un modèle',
+    hu: 'Másolás sablonok alapján',
+    pl: 'Kopiowanie według szablonów',
+    ru: 'Копирование по шаблонам',
     zh_CN: '通过模板复制',
     zh_TW: '透過範本複製',
+    ja: 'テンプレートによるコピー',
   },
   'settings.copy_templates_note': {
     en: `To use this feature enable "Copy by templates..." option in context menu editor or set keybindings.
@@ -1763,6 +1768,17 @@ Available variables: %B - a list mark (bullet); %CT - custom title or title; %T 
     zh_CN: '历史子面板',
     zh_TW: '歷史子面板',
     ja: '履歴のサブパネル',
+  },
+  'settings.sub_panel.sync': {
+    en: 'Sync sub-panel',
+    de: 'Synchronisierungs-Unter-Panel',
+    fr: 'Sous-panneau Synchronisation',
+    hu: 'Szinkronizálás alpanel',
+    pl: 'Podpanel synchronizacji',
+    ru: 'Подпанель синхронизации',
+    zh_CN: '同步子面板',
+    zh_TW: '同步子面板',
+    ja: '同期サブパネル',
   },
   'settings.nav_bar_enabled': {
     en: 'Enabled elements',

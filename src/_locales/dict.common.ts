@@ -2375,9 +2375,14 @@ export const commonTranslations: Translations = {
   },
   'menu.copy_by_templates': {
     en: 'Copy by templates...',
+    de: 'Kopieren nach Vorlagen...',
     fr: 'Copier avec modèle…',
+    hu: 'Másolás sablonok alapján...',
+    pl: 'Kopiowanie według szablonów...',
+    ru: 'Копирование по шаблонам...',
     zh_CN: '通过模板复制...',
     zh_TW: '透過範本複製...',
+    ja: 'テンプレートによるコピー...',
   },
   'menu.copy_by_template': {
     en: name => 'Copy ' + name,
