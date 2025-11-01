@@ -41,7 +41,7 @@
 import { ref, reactive, computed, watch, onMounted, nextTick } from 'vue'
 import { Bookmark, ScrollBoxComponent, BookmarksPanel, DropType, MenuType } from 'src/types'
 import { ItemBounds, BookmarksPanelComponent, ItemBoundsType } from 'src/types'
-import { BKM_OTHER_ID } from 'src/defaults'
+import { BKM_OTHER_ID, NOID } from 'src/defaults'
 import { translate } from 'src/dict'
 import { Settings } from 'src/services/settings'
 import * as Selection from 'src/services/selection'
@@ -259,7 +259,9 @@ onMounted(() => {
 
 function onDrop(): void {
   DnD.reactive.dstType = DropType.Bookmarks
-  if (DnD.reactive.dstParentId === -1) DnD.reactive.dstParentId = BKM_OTHER_ID
+  if (DnD.reactive.dstParentId === -1) {
+    DnD.reactive.dstParentId = props.panel.rootId === NOID ? BKM_OTHER_ID : props.panel.rootId
+  }
 }
 
 function onRightMouseUp(e: MouseEvent): void {
