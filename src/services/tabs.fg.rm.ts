@@ -397,33 +397,63 @@ export async function undoRemove(tabs: ItemInfo[], parents: Record<ID, ID>): Pro
   const panel = Sidebar.panelsById[firstTab.panelId ?? NOID]
   if (!Utils.isTabsPanel(panel)) return
 
-  const nextTabIndex = panel.nextTabIndex
-  const oldNewIds: Record<ID, ID> = {}
-  for (let i = 0; i < tabs.length; i++) {
-    const tab = tabs[i]
-    const index = nextTabIndex + i
+  const dstParentId = firstTab.parentId ?? NOID
+  const dstParent = Tabs.byId[dstParentId]
+  const dstParentValid = dstParentId === NOID || !!dstParent
 
-    let parentId = oldNewIds[parents[tab.id]]
-    const parent = Tabs.byId[parents[tab.id]]
-    if (parentId === undefined && parent && parent.index < index) {
-      parentId = parent.id
-    }
+  // Check if it's possible to restore original position
+  const isSequence = tabs.every((t, i, a) => {
+    if (i === 0) return true
+    const pt = a[i - 1]
+    return t.index !== undefined && pt?.index !== undefined && t.index - pt.index === 1
+  })
+  const isBranchesOrList =
+    isSequence &&
+    dstParentValid &&
+    tabs.every(t => t.parentId === dstParentId || tabs.find(tt => tt.id === t.parentId))
 
-    Tabs.setNewTabPosition(index, parentId, panel.id, false)
+  let dstIndex = firstTab.index
+  const dstParentBranchLen = (dstParent && Tabs.getBranchLen(dstParentId)) ?? 0
+  const dstParentBranchEnd = (dstParent && dstParent.index + dstParentBranchLen + 1) ?? 0
+  let indexIsOk =
+    dstIndex !== undefined &&
+    dstIndex <= Tabs.list.length &&
+    (!dstParent || (dstParentBranchEnd >= dstIndex && dstParent.index < dstIndex))
 
-    const conf: browser.tabs.CreateProperties = {
-      windowId: Windows.id,
-      index,
-      url: Utils.normalizeUrl(tab.url, tab.title),
-      cookieStoreId: tab.container,
-      active: false,
+  // If index is not ok (e.g. other tabs were closed/created and branch was shrinked/shifted)
+  // set index to end of the branch
+  if (!indexIsOk && dstIndex !== undefined && dstParent) {
+    dstIndex = dstParentBranchEnd
+    indexIsOk =
+      dstIndex !== undefined &&
+      dstIndex <= Tabs.list.length &&
+      dstParentBranchEnd >= dstIndex &&
+      dstParent.index < dstIndex
+  }
+
+  const nextTab = indexIsOk && dstIndex !== undefined ? Tabs.list[dstIndex] : undefined
+  const nextTabIsDirectChild = nextTab && dstParentValid && nextTab.parentId === dstParentId
+  const nextTabIsNotDescendant =
+    nextTab &&
+    dstParentValid &&
+    !nextTabIsDirectChild &&
+    !Tabs.findAncestor(nextTab, t => t.id === dstParentId)
+
+  const noTreeInterruption = !nextTab || nextTabIsDirectChild || nextTabIsNotDescendant
+  const posCanBeRestored = isBranchesOrList && indexIsOk && noTreeInterruption
+
+  if (posCanBeRestored) {
+    // Restore parent and index
+    Tabs.open(tabs, { panelId: panel.id, index: dstIndex, parentId: dstParentId })
+  } else {
+    if (dstParent && isBranchesOrList) {
+      // Restore parent and put tabs to the end of branch
+      const index = dstParent.index + dstParentBranchLen + 1
+      Tabs.open(tabs, { panelId: panel.id, index, parentId: dstParentId })
+    } else {
+      // Put tabs to the end of panel
+      Tabs.open(tabs, { panelId: panel.id, index: panel.nextTabIndex, parentId: NOID })
     }
-    if (conf.url) {
-      conf.discarded = true
-      conf.title = tab.title
-    }
-    const newTab = await browser.tabs.create(conf)
-    oldNewIds[tab.id] = newTab.id
   }
 }
 
