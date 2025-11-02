@@ -397,6 +397,10 @@ export async function undoRemove(tabs: ItemInfo[], parents: Record<ID, ID>): Pro
   const panel = Sidebar.panelsById[firstTab.panelId ?? NOID]
   if (!Utils.isTabsPanel(panel)) return
 
+  if (Sidebar.prevActivePanelId === panel.id) {
+    Sidebar.activatePanel(panel.id)
+  }
+
   const dstParentId = firstTab.parentId ?? NOID
   const dstParent = Tabs.byId[dstParentId]
   const dstParentValid = dstParentId === NOID || !!dstParent
