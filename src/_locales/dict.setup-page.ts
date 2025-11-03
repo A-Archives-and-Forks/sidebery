@@ -1790,6 +1790,17 @@ Available variables: %B - a list mark (bullet); %CT - custom title or title; %T 
     zh_TW: '已啟用的元件',
     ja: '有効な要素',
   },
+  'settings.nav_bar_enabled_inline_note': {
+    en: 'Note: "In one line" mode is enabled, so the navigation bar elements will be separated into two groups: panels (on the left) and buttons (on the right)',
+    de: 'Hinweis: Der Modus „In einer Zeile“ ist aktiviert, sodass die Elemente der Navigationsleiste in zwei Gruppen unterteilt werden: Bedienfelder (links) und Schaltflächen (rechts)',
+    fr: 'Remarque : le mode « Sur une seule ligne » est activé, les éléments de la barre de navigation seront donc séparés en deux groupes : les panneaux (à gauche) et les boutons (à droite)',
+    hu: 'Megjegyzés: Az „Egy sorban” mód engedélyezve van, így a navigációs sáv elemei két csoportra lesznek felosztva: panelek (bal oldalon) és gombok (jobb oldalon)',
+    pl: 'Uwaga: Tryb „W jednej linii” jest włączony, więc elementy paska nawigacyjnego zostaną podzielone na dwie grupy: panele (po lewej stronie) i przyciski (po prawej stronie)',
+    ru: 'Примечание: включен режим «В одной строке», поэтому элементы панели навигации будут разделены на две группы: панели (слева) и кнопки (справа)',
+    zh_CN: '注：“单行”模式已启用，因此导航栏元素将分为两组：面板（左侧）和按钮（右侧）',
+    zh_TW: '註：已啟用「單行模式」，因此導覽列元素將分為兩組：面板（左側）與按鈕（右側）',
+    ja: '注：「1行表示」モードが有効なため、ナビゲーションバーの要素は2つのグループに分けられます：パネル（左側）とボタン（右側）',
+  },
   'settings.nav_bar.no_elements': {
     en: 'No elements',
     de: 'Keine Elemente',

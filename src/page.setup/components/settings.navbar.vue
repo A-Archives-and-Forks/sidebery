@@ -64,7 +64,10 @@ section(
       v-model:value="Settings.state.subPanelSync"
       @update:value="Settings.saveDebounced(150)")
 
-  InfoField(label="settings.nav_bar_enabled" :inactive="!availableBtns.length").-sub-title
+  InfoField(
+    label="settings.nav_bar_enabled"
+    :value="Settings.state.navBarInline ? translate('settings.nav_bar_enabled_inline_note') : undefined"
+    :inactive="!availableBtns.length").-sub-title
   .sub-fields
     .card.-placeholder(
       v-if="!enabledBtns.length"
