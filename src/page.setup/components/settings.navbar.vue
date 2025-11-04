@@ -66,7 +66,7 @@ section(
 
   InfoField(
     label="settings.nav_bar_enabled"
-    :value="Settings.state.navBarInline ? translate('settings.nav_bar_enabled_inline_note') : undefined"
+    :value="Settings.state.navBarInline && Settings.state.navBarLayout === 'horizontal' ? translate('settings.nav_bar_enabled_inline_note') : undefined"
     :inactive="!availableBtns.length").-sub-title
   .sub-fields
     .card.-placeholder(
