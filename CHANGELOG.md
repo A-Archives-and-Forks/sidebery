@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+
+## v5.4.0 - 2025.11.05
+
 ### Added
 
 - Drag and drop: handle native bookmark folders and link lists
