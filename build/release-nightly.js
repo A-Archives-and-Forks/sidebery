@@ -9,7 +9,7 @@ const REPO = 'sidebery'
 const BRANCH = 'v5'
 const MAX_ASSETS_COUNT = 10
 const ADDON_ID = '{3c078156-979c-498b-8990-85f7987dd929}'
-const CONSIDERED_COMMIT_PREFIXES_RE = /^(fix|feat|perf)/
+const CONSIDERED_COMMIT_PREFIXES_RE = /^(fix|feat|perf|l10n)/
 const ASSET_RE = /sidebery-(\d\d?\.\d\d?\.\d\d?\.\d?\d?\d?)\.xpi/
 
 const gitLogFlags = `--date-order --abbrev-commit --decorate --format=format:'%H::%s' ${BRANCH}`
