@@ -93,6 +93,7 @@ export interface SettingsState {
   tabSwitchDelay: number
   forceDiscard: boolean
   tabUpdDelay: number
+  forceUpdTooltip: boolean
 
   // New tab position
   moveNewTabPin: (typeof SETTINGS_OPTIONS.moveNewTabPin)[number]

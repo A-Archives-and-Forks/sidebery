@@ -588,7 +588,7 @@ function onMouseEnter(e: MouseEvent) {
 
   if (Settings.state.previewTabs) {
     Preview.setTargetTab(props.tabId, e.clientY)
-  } else {
+  } else if (!Settings.state.forceUpdTooltip) {
     updateTooltipDebounced()
   }
 }

@@ -95,6 +95,7 @@ export const DEFAULT_SETTINGS: SettingsState = {
   tabSwitchDelay: 0,
   forceDiscard: true,
   tabUpdDelay: 150,
+  forceUpdTooltip: false,
 
   // New tab position
   moveNewTabPin: 'start',

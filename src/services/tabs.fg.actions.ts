@@ -64,7 +64,7 @@ export function mutateNativeTabToSideberyTab(nativeTab: NativeTab): Tab {
       status: Tabs.getStatus(tab),
       isParent: tab.isParent,
       folded: tab.folded,
-      tooltip: '',
+      tooltip: Settings.state.forceUpdTooltip ? getTooltip(tab) : '',
       customTitleEdit: false,
       customColor: tab.customColor ?? null,
       url: tab.url,
@@ -103,7 +103,7 @@ export function createReactiveProps(tab: Tab): ReactiveTabProps {
     status: Tabs.getStatus(tab),
     isParent: tab.isParent,
     folded: tab.folded,
-    tooltip: '',
+    tooltip: Settings.state.forceUpdTooltip ? getTooltip(tab) : '',
     customTitleEdit: false,
     customColor: tab.customColor ?? null,
     url: tab.url,
@@ -2985,6 +2985,9 @@ function updateSuccession(exclude?: readonly ID[]) {
 export function renderTitle(tab: Tab, forcedTitle?: string) {
   if (tab.titleEl) {
     tab.titleEl.innerText = forcedTitle ?? tab.customTitle ?? tab.title
+  }
+  if (Settings.state.forceUpdTooltip) {
+    updateTooltip(tab.id)
   }
 }
 
