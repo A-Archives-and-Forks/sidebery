@@ -1042,7 +1042,7 @@ export function extractTabInfoFromTitle(item: ItemInfo, updateTitleOnly?: boolea
     isCustomTitle = true
     return ''
   })
-  if (isCustomTitle) item.customTitle = item.title
+  if (isCustomTitle && !updateTitleOnly) item.customTitle = item.title
 }
 
 /**
