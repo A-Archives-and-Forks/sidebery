@@ -1962,6 +1962,7 @@ export async function bookmarkTabsPanel(
       }
       if (Containers.reactive.byId[tab.cookieStoreId]) info.container = tab.cookieStoreId
       if (tab.customColor) info.customColor = tab.customColor
+      if (tab.customTitle) info.customTitle = tab.customTitle
       items.push(info)
     }
     items.push({ id: 'separator' })
@@ -1977,6 +1978,7 @@ export async function bookmarkTabsPanel(
     }
     if (Containers.reactive.byId[tab.cookieStoreId]) info.container = tab.cookieStoreId
     if (tab.customColor) info.customColor = tab.customColor
+    if (tab.customTitle) info.customTitle = tab.customTitle
     items.push(info)
   }
 
@@ -2143,6 +2145,14 @@ export async function restoreFromBookmarks(panel: TabsPanel, silent?: boolean): 
         if (newTab) newTab.reactive.customColor = newTab.customColor = info.customColor
       }
 
+      if (info.customTitle) {
+        const newTab = Tabs.byId[newNativeTab.id]
+        if (newTab) {
+          newTab.customTitle = info.customTitle
+          Tabs.renderTitle(newTab)
+        }
+      }
+
       continue
     }
 
@@ -2202,6 +2212,14 @@ export async function restoreFromBookmarks(panel: TabsPanel, silent?: boolean): 
       if (info.customColor) {
         const newTab = Tabs.byId[newNativeTab.id]
         if (newTab) newTab.reactive.customColor = newTab.customColor = info.customColor
+      }
+
+      if (info.customTitle) {
+        const newTab = Tabs.byId[newNativeTab.id]
+        if (newTab) {
+          newTab.customTitle = info.customTitle
+          Tabs.renderTitle(newTab)
+        }
       }
     }
 

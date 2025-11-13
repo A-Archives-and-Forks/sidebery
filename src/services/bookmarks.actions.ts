@@ -4,7 +4,7 @@ import { Bookmark, Panel, Notification, DialogConfig, DragInfo, SubPanelType } f
 import { Stored, BookmarksSortType, DstPlaceInfo, ItemInfo, TabsPanel, DragItem } from 'src/types'
 import { CopyTemplate } from 'src/types'
 import { CONTAINER_ID, NOID, BKM_OTHER_ID, BKM_ROOT_ID, PRE_SCROLL, GROUP_RE } from 'src/defaults'
-import { FOLDER_NAME_DATA_RE, GROUP_URL, PIN_MARK } from 'src/defaults'
+import { FOLDER_NAME_DATA_RE, GROUP_URL, PIN_MARK, TITLE_IN_BOOKMARK_RE } from 'src/defaults'
 import { TAB_BOOKMARK_COLOR, BOOKMARK_TAB_COLOR } from 'src/defaults'
 import { CONTAINER_IN_BOOKMARK_RE, COLOR_IN_BOOKMARK_RE } from 'src/defaults'
 import { Bookmarks, BookmarksPopupConfig, BookmarksPopupResult } from 'src/services/bookmarks'
@@ -1007,6 +1007,9 @@ export function attachTabInfoToTitle(item: ItemInfo) {
   if (item.customColor) {
     item.title += ` [${TAB_BOOKMARK_COLOR[item.customColor]}]`
   }
+  if (item.customTitle) {
+    item.title += ' [*]'
+  }
 }
 
 export function extractTabInfoFromTitle(item: ItemInfo, updateTitleOnly?: boolean) {
@@ -1033,6 +1036,13 @@ export function extractTabInfoFromTitle(item: ItemInfo, updateTitleOnly?: boolea
     if (!updateTitleOnly) item.customColor = color
     return ''
   })
+
+  let isCustomTitle = false
+  item.title = item.title.replace(TITLE_IN_BOOKMARK_RE, () => {
+    isCustomTitle = true
+    return ''
+  })
+  if (isCustomTitle) item.customTitle = item.title
 }
 
 /**
