@@ -1302,6 +1302,7 @@ export function switchPanel(
   Selection.resetSelection()
 
   const activePanelId = Sidebar.activePanelId
+
   // If current active panel is not exist
   let activePanel = Sidebar.panelsById[activePanelId]
   if (!activePanel) {
@@ -1350,6 +1351,7 @@ export function switchPanel(
       }
     }
   }
+
   if (actIndex === -1) return
   if (hdnIndex === -1 || isInline) hdnIndex = visiblePanels.length
 

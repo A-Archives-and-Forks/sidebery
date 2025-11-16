@@ -270,5 +270,5 @@ export interface SettingsState {
   // Keybindings
   selectActiveTabFirst: boolean
   selectCyclic: boolean
-  ignoreHiddenPanelsSwitching: boolean
+  loopPanelsIgnoreHidden: boolean
 }

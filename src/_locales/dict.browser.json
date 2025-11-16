@@ -168,10 +168,26 @@
     "ja": "次のパネルに切り替え"
   },
   "KbLoopPanelsForwards": {
-    "en": "Loop through all panels (Forwards)"
+    "en": "Loop through panels (Forwards)",
+    "de": "Durch die Panel schalten (vorwärts)",
+    "fr": "Boucle à travers les panneaux (vers l'avant)",
+    "hu": "Panelek áttekintése (előre)",
+    "pl": "Cyklicznie przełączać się między panelami (do przodu)",
+    "ru": "Циклически переключаться по панелям (вперед)",
+    "zh_CN": "循环遍历面板（向前）",
+    "zh_TW": "循環遍歷面板（向前）",
+    "ja": "パネルを順に巡回する（順方向）"
   },
   "KbLoopPanelsBackwards": {
-    "en": "Loop through all panels (Backwards)"
+    "en": "Loop through panels (Backwards)",
+    "de": "Durch die Panel schalten (rückwärts)",
+    "fr": "Boucle à travers les panneaux (à rebours)",
+    "hu": "Panelek áttekintése (visszafelé)",
+    "pl": "Cyklicznie przełączać się między panelami (wstecz)",
+    "ru": "Циклически переключаться по панелям (назад)",
+    "zh_CN": "循环遍历面板（倒序）",
+    "zh_TW": "循環遍歷面板（倒序）",
+    "ja": "パネルを順に巡回する（逆方向）"
   },
   "KbPrevPanel": {
     "en": "Switch to previous panel",

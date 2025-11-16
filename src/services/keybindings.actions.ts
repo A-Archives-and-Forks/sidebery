@@ -162,9 +162,9 @@ function onCmd(name: string): void {
   if (!kb) return
 
   if (name === 'loop_panels_forwards')
-    Sidebar.switchPanel(1, Settings.state.ignoreHiddenPanelsSwitching, true, undefined, true)
+    Sidebar.switchPanel(1, Settings.state.loopPanelsIgnoreHidden, true, undefined, true)
   else if (name === 'loop_panels_backwards')
-    Sidebar.switchPanel(-1, Settings.state.ignoreHiddenPanelsSwitching, true, undefined, true)
+    Sidebar.switchPanel(-1, Settings.state.loopPanelsIgnoreHidden, true, undefined, true)
   else if (name === 'next_panel') Sidebar.switchPanel(1, false, true)
   else if (name === 'prev_panel') Sidebar.switchPanel(-1, false, true)
   else if (name === 'new_tab_on_panel') onKeyNewTabInPanel()
