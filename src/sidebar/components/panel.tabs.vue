@@ -199,7 +199,9 @@ function onDoubleClick(e: MouseEvent) {
   if (!Mouse.isTarget('panel', props.panel.id)) return
   if (Settings.state.tabsPanelLeftClickAction !== 'none') return
   const da = Settings.state.tabsPanelDoubleClickAction
-  if (da === 'tab') return Tabs.createTabInPanel(props.panel)
+  if (da === 'tab') {
+    return Tabs.createTabInPanel(props.panel, { fromNewTabButton: true })
+  }
   if (da === 'collapse') {
     const topLvlTabs = props.panel.tabs.filter(t => t.lvl === 0)
     if (topLvlTabs.length) return Tabs.foldAllInactiveBranches(topLvlTabs)
