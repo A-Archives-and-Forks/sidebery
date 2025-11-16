@@ -24,7 +24,14 @@
   section
     h2 {{translate('settings.kb_switching_panel')}}
     span.header-shadow
-    KeybindingField.-no-separator(:keybinding="Keybindings.reactive.byName.next_panel")
+    KeybindingField.-no-separator(:keybinding="Keybindings.reactive.byName.loop_panels_forwards")
+    .sub-fields
+      KeybindingField.-no-separator(:keybinding="Keybindings.reactive.byName.loop_panels_backwards")
+      ToggleField.-no-separator(
+            label="settings.kb_switching_panel.ignore_hidden"
+            v-model:value="Settings.state.ignoreHiddenPanelsSwitching"
+            @update:value="Settings.saveDebounced(150)")
+    KeybindingField(:keybinding="Keybindings.reactive.byName.next_panel")
     KeybindingField(:keybinding="Keybindings.reactive.byName.prev_panel")
     KeybindingField(:keybinding="Keybindings.reactive.byName.switch_to_panel_0")
     KeybindingField(:keybinding="Keybindings.reactive.byName.switch_to_panel_1")

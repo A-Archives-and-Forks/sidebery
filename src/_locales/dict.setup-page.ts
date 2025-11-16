@@ -7008,6 +7008,9 @@ Przykłady: "*", "ctrl+$", "ctrl+alt+g"`,
     zh_TW: '切換面板',
     ja: 'パネル間の切り替え',
   },
+  'settings.kb_switching_panel.ignore_hidden': {
+    en: 'Ignore hidden panels',
+  },
   'settings.kb_scroll_active_panel': {
     en: 'Scrolling the active panel',
     de: 'Scrollen des aktiven Panels',
