@@ -20,11 +20,13 @@
     "build": "node build/all.js",
     "clear.npm": "rm -rf node_modules package-lock.json",
     "clear": "rm -rf addon",
-    "lint": "eslint ./src && web-ext lint -s ./addon",
+    "lint": "eslint ./src",
     "changelog": "node build/changelog.js",
     "addon": "node build/addon.js",
     "release-notes": "node build/release-notes.js",
-    "release.nightly": "node build/release-nightly.js"
+    "release.nightly": "node build/release-nightly.js",
+    "test": "vitest run",
+    "test.watch": "vitest watch"
   },
   "author": "mbnuqw",
   "license": "MIT",

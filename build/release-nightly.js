@@ -24,6 +24,10 @@ async function main() {
   if (!process.env.WEB_EXT_API_KEY) throw 'No WEB_EXT_API_KEY'
   if (!process.env.WEB_EXT_API_SECRET) throw 'No WEB_EXT_API_SECRET'
 
+  // Test
+  console.log('Running tests...')
+  execSync('npm run test', { encoding: 'utf-8', stdio: 'inherit' })
+
   // Get info from manifest.json and updates.json
   console.log('Getting info from manifest.json and updates.json...')
   const amoVersion = await getAMOVersion()
