@@ -1319,14 +1319,12 @@ export function switchPanel(
   const visiblePanels = []
   const hiddenPanels = []
   const isInline = Settings.state.navBarLayout === 'horizontal' && Settings.state.navBarInline
-  let hdnIndex = -1
-  let actIndex = -1
+  let hdnStartIndex = -1
   let actIsHidden = false
-  let newActIsHidden = false
 
   for (const id of Sidebar.nav) {
     if (id === 'hdn') {
-      hdnIndex = visiblePanels.length
+      hdnStartIndex = visiblePanels.length
       continue
     }
 
@@ -1338,82 +1336,51 @@ export function switchPanel(
       panel.hidden ||
       (isTabsPanel && Settings.state.hideEmptyPanels && !panel.reactive.len) ||
       (isTabsPanel && Settings.state.hideDiscardedTabPanels && panel.allDiscarded)
+
     if (isHidden) {
-      hiddenPanels.push(panel)
       if (panel.id === activePanelId) {
-        actIndex = hiddenPanels.length - 1
         actIsHidden = true
+        hiddenPanels.push(panel)
+      } else if (!ignoreHidden) {
+        hiddenPanels.push(panel)
       }
     } else {
       visiblePanels.push(panel)
-      if (panel.id === activePanelId) {
-        actIndex = visiblePanels.length - 1
-      }
     }
   }
 
+  if (hdnStartIndex === -1 || isInline) hdnStartIndex = visiblePanels.length
+
+  let panels = [...visiblePanels]
+  panels.splice(hdnStartIndex, 0, ...hiddenPanels)
+
+  let actIndex = panels.indexOf(activePanel)
   if (actIndex === -1) return
-  if (hdnIndex === -1 || isInline) hdnIndex = visiblePanels.length
 
+  if (shouldLoop) {
+    actIndex += panels.length
+    panels = [...panels, ...panels, ...panels]
+  }
+
+  // Find the next active panel
   let panel
-  if (!actIsHidden) {
-    for (let i = actIndex + dir; i >= 0 || i < visiblePanels.length; i += dir) {
-      if (shouldLoop && dir < 0 && actIndex === 0) {
-        if (ignoreHidden) {
-          panel = visiblePanels[visiblePanels.length - 1]
-          newActIsHidden = false
-        } else {
-          panel = hiddenPanels[hiddenPanels.length - 1]
-          newActIsHidden = true
-        }
-        break
-      }
-      panel = visiblePanels[i]
-      newActIsHidden = false
-      if ((dir > 0 && i === hdnIndex) || (dir < 0 && i + 1 === hdnIndex)) {
-        if (hiddenPanels.length && !ignoreHidden) {
-          Sidebar.openHiddenPanelsPopup()
-          if (dir > 0) panel = hiddenPanels[0]
-          else panel = hiddenPanels[hiddenPanels.length - 1]
-          newActIsHidden = true
-        }
-        if (shouldLoop && ignoreHidden) {
-          panel = visiblePanels[0]
-        }
-        break
-      }
-      if (!panel) break
-      if (panel.skipOnSwitching) continue
-      break
-    }
-  } else {
-    for (let i = actIndex + dir; i >= 0 || i < hiddenPanels.length; i += dir) {
-      panel = hiddenPanels[i]
-      newActIsHidden = true
-      if (!panel) {
-        if (visiblePanels.length) {
-          panel = visiblePanels[dir > 0 ? hdnIndex : hdnIndex - 1]
-          if (!panel && !shouldLoop) break
-          if (hiddenPanelsPopupIsShown) Sidebar.reactive.hiddenPanelsPopup = false
-          newActIsHidden = false
-          if (shouldLoop) panel = visiblePanels[dir > 0 ? 0 : visiblePanels.length - 1]
-        }
-        break
-      }
-      if (panel.skipOnSwitching) continue
-      break
-    }
-  }
-
-  if (newActIsHidden && !hiddenPanelsPopupIsShown && !ignoreHidden) {
-    Sidebar.openHiddenPanelsPopup()
-  }
-
+  const finder = (p: Panel) => !p.skipOnSwitching
+  if (dir > 0) panel = Utils.findFrom(panels, actIndex + dir, finder)
+  else panel = Utils.findLastFrom(panels, actIndex + dir, finder)
   if (!panel) return
+
+  const nextActIsHidden = hiddenPanels.includes(panel)
+
+  // Show / Hide popup of hidden panels
+  if (nextActIsHidden && !hiddenPanelsPopupIsShown) {
+    Sidebar.openHiddenPanelsPopup()
+  } else if (!nextActIsHidden && hiddenPanelsPopupIsShown) {
+    Sidebar.reactive.hiddenPanelsPopup = false
+  }
 
   switchToPanel(panel.id, false, withoutTabCreation)
 
-  if (newActIsHidden && Sidebar.scrollHiddenPanelsPopupTo) {
+  if (nextActIsHidden && Sidebar.scrollHiddenPanelsPopupTo) {
     Sidebar.scrollHiddenPanelsPopupTo(panel.id)
   }
 }
