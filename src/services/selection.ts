@@ -222,7 +222,13 @@ export function selectTabsRange(aTab: Tab, bTab?: Tab): void {
   }
 
   const minIndex = Math.min(aTab.index, bTab.index)
-  const maxIndex = Math.max(aTab.index, bTab.index)
+  let maxIndex = Math.max(aTab.index, bTab.index)
+
+  // Expand range to include folded tabs
+  const lastTab = Tabs.list[maxIndex]
+  if (lastTab.isParent && lastTab.folded) {
+    maxIndex += Tabs.getBranchLen(lastTab.id) ?? 0
+  }
 
   const panel = Sidebar.panelsById[aTab.panelId]
   if (!Utils.isTabsPanel(panel)) return resetSelection()
