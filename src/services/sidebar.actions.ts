@@ -2723,3 +2723,26 @@ export function restoreActivePanelScrollPosition() {
   actPanel.scrollEl.scrollTop = actPanelPrevScrollPos
   actPanel.scrollComponent.recalcScroll()
 }
+
+export function attachSelLenBadgeToTab(id?: ID | null) {
+  let tab = Tabs.byId[id ?? NOID]
+  if (!tab) {
+    Sidebar.reactive.selLenBadgeTarget = null
+    return
+  }
+
+  if (tab?.invisible) tab = Tabs.findAncestor(tab, p => !p.invisible)
+
+  if (tab) Sidebar.reactive.selLenBadgeTarget = document.getElementById('tab' + tab.id)
+  else Sidebar.reactive.selLenBadgeTarget = null
+}
+
+export function attachSelLenBadgeToBkm(panelId: ID, bkmId?: ID | null) {
+  if (!bkmId) {
+    Sidebar.reactive.selLenBadgeTarget = null
+    return
+  }
+
+  const el = document.getElementById('bookmark' + panelId + bkmId)
+  Sidebar.reactive.selLenBadgeTarget = el
+}

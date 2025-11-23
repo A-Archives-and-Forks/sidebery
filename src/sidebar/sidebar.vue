@@ -106,6 +106,11 @@
     .right-vertical-box(v-if="pinnedTabsBarRight || navBarRight")
       PinnedTabsBar(v-if="pinnedTabsBarRight")
       NavigationBar.-vert(v-if="navBarRight")
+
+  teleport(
+    v-if="Settings.state.selLen && Sidebar.reactive.selLenBadgeTarget && Sidebar.reactive.selLen"
+    :to="Sidebar.reactive.selLenBadgeTarget")
+    .sel-len-teleported {{Sidebar.reactive.selLen}}
 </template>
 
 <script lang="ts" setup>

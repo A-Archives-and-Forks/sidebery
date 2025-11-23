@@ -187,6 +187,9 @@ onMounted(() => {
         x = getX(tickEl.value.offsetWidth, x)
         state.tickPosStyle.transform = `translateY(${y}px) translateX(${x}px)`
         state.tickPosStyle.bottom = isAbovePointer ? '0px' : ''
+        if (Settings.state.selLen && Sidebar.reactive.selLen) {
+          Sidebar.reactive.selLenBadgeTarget = tickEl.value
+        }
       })
     } else {
       state.tackBlocks = blocks
@@ -201,6 +204,9 @@ onMounted(() => {
         x = getX(tackEl.value.offsetWidth, x)
         state.tackPosStyle.transform = `translateY(${y}px) translateX(${x}px)`
         state.tackPosStyle.bottom = isAbovePointer ? '0px' : ''
+        if (Settings.state.selLen && Sidebar.reactive.selLen) {
+          Sidebar.reactive.selLenBadgeTarget = tackEl.value
+        }
       })
     }
   })

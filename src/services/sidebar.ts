@@ -17,6 +17,8 @@ export interface SidebarReactiveState {
 
   selectedNavId: ID
   selectedHeader: ID
+  selLenBadgeTarget: null | string | HTMLElement
+  selLen: number
 
   subPanelActive: boolean
   subPanelType: SubPanelType
@@ -47,6 +49,8 @@ export const Sidebar = {
 
     selectedNavId: NOID,
     selectedHeader: NOID,
+    selLenBadgeTarget: null,
+    selLen: 0,
 
     subPanelActive: false,
     subPanelType: SubPanelType.Null,

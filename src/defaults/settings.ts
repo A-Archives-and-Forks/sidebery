@@ -13,6 +13,7 @@ export const DEFAULT_SETTINGS: SettingsState = {
   copyMultiBullet: '',
   copyTemplates: 'HTML:%B<a href="%U">%CT</a>\nMarkdown:%B[%CT](%U)',
   updTooltipDelay: 100,
+  selLen: true,
 
   // Context menu
   ctxMenuNative: false,

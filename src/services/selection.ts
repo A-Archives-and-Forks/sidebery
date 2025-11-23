@@ -172,6 +172,11 @@ export function selectTab(tabId: ID): void {
 
   handleSelection(tabId, SelectionType.Tabs)
 
+  if (Settings.state.selLen) {
+    Sidebar.reactive.selLen = selected.size
+    Sidebar.attachSelLenBadgeToTab(tabId)
+  }
+
   if (Settings.state.nativeHighlight) updateHighlightedTabs(120)
 }
 
@@ -188,6 +193,11 @@ export function selectTabs(tabIds: ID[]): void {
   if (normFirst === null) normFirst = tabIds[0]
   normLast = tabIds[tabIds.length - 1]
   normType = SelectionType.Tabs
+
+  if (Settings.state.selLen) {
+    Sidebar.reactive.selLen = selected.size
+    Sidebar.attachSelLenBadgeToTab(tabIds[0])
+  }
 
   if (Settings.state.nativeHighlight) updateHighlightedTabs(120)
 }
@@ -243,6 +253,11 @@ export function selectTabsRange(aTab: Tab, bTab?: Tab): void {
 
   selected = locked.union(new Set(normal))
 
+  if (Settings.state.selLen) {
+    Sidebar.reactive.selLen = selected.size
+    Sidebar.attachSelLenBadgeToTab(bTab?.id)
+  }
+
   if (Settings.state.nativeHighlight) updateHighlightedTabs(120)
 }
 
@@ -266,6 +281,11 @@ export function selectTabsBranch(parentTab: Tab): void {
 
   selected = locked.union(new Set(normal))
 
+  if (Settings.state.selLen) {
+    Sidebar.reactive.selLen = selected.size
+    Sidebar.attachSelLenBadgeToTab(parentTab.id)
+  }
+
   if (Settings.state.nativeHighlight) updateHighlightedTabs(120)
 }
 
@@ -276,6 +296,11 @@ export function selectBookmark(bookmarkId: ID): void {
   target.sel = true
 
   handleSelection(bookmarkId, SelectionType.Bookmarks)
+
+  if (Settings.state.selLen) {
+    Sidebar.reactive.selLen = selected.size
+    Sidebar.attachSelLenBadgeToBkm(Sidebar.activePanelId, bookmarkId)
+  }
 }
 
 export function selectBookmarks(ids: ID[]): void {
@@ -291,6 +316,11 @@ export function selectBookmarks(ids: ID[]): void {
   if (normFirst === null) normFirst = ids[0]
   normLast = ids[ids.length - 1]
   normType = SelectionType.Bookmarks
+
+  if (Settings.state.selLen) {
+    Sidebar.reactive.selLen = selected.size
+    Sidebar.attachSelLenBadgeToBkm(Sidebar.activePanelId, ids[0])
+  }
 }
 
 export function selectBookmarksRange(aBookmark: Bookmark, bBookmark?: Bookmark): void {
@@ -342,6 +372,11 @@ export function selectBookmarksRange(aBookmark: Bookmark, bBookmark?: Bookmark):
   normLast = bBookmark.id
 
   selected = locked.union(new Set(normal))
+
+  if (Settings.state.selLen) {
+    Sidebar.reactive.selLen = selected.size
+    Sidebar.attachSelLenBadgeToBkm(Sidebar.activePanelId, bBookmark.id)
+  }
 }
 
 export function selectHistory(id: ID): void {
@@ -412,6 +447,11 @@ export function deselectTab(id: ID, preserveLocked?: boolean): void {
     }
   }
 
+  if (Settings.state.selLen) {
+    Sidebar.reactive.selLen = selected.size
+    Sidebar.attachSelLenBadgeToTab(normLast)
+  }
+
   if (Settings.state.nativeHighlight) updateHighlightedTabs(120)
 }
 
@@ -426,6 +466,10 @@ export function deselectTabsBranch(parentTab: Tab, preserveLocked?: boolean): vo
       deselectTab(tab.id, preserveLocked)
     }
   }
+
+  if (Settings.state.selLen) {
+    Sidebar.attachSelLenBadgeToTab(normLast)
+  }
 }
 
 export function deselectBookmark(id: ID, preserveLocked?: boolean): void {
@@ -435,6 +479,11 @@ export function deselectBookmark(id: ID, preserveLocked?: boolean): void {
   if (target) {
     target.sel = false
     if (!preserveLocked) target.selLock = false
+  }
+
+  if (Settings.state.selLen) {
+    Sidebar.reactive.selLen = selected.size
+    Sidebar.attachSelLenBadgeToBkm(Sidebar.activePanelId, normLast)
   }
 }
 
@@ -510,6 +559,11 @@ export function resetSelection(forced?: boolean, preserveLocked?: boolean): void
     selected.clear()
   } else {
     selected = new Set(locked)
+  }
+
+  if (Settings.state.selLen) {
+    Sidebar.reactive.selLen = selected.size
+    Sidebar.reactive.selLenBadgeTarget = null
   }
 }
 

@@ -13,6 +13,7 @@ export interface SettingsState {
   copyMultiBullet: string
   copyTemplates: string
   updTooltipDelay: number
+  selLen: boolean
 
   // Context menu
   ctxMenuNative: boolean
