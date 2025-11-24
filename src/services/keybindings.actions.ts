@@ -189,6 +189,7 @@ function onCmd(name: string): void {
   else if (name === 'down') onKeySelect(1)
   else if (name === 'up_shift') onKeySelectExpand(-1)
   else if (name === 'down_shift') onKeySelectExpand(1)
+  else if (name === 'sel_tabs_branch') onKeySelectTabsBranch()
   else if (name === 'lock_selection') onKeyLockSelection()
   else if (name === 'menu') onKeyMenu()
   else if (name === 'unload_tabs') onKeyUnloadTabs()
@@ -771,6 +772,48 @@ function onKeySelectExpand(dir: number): void {
     if (target.start < s + 64) activePanel.scrollEl.scrollTop = target.start - 64
     if (target.end > h + s - 64) activePanel.scrollEl.scrollTop = target.end - h + 64
   }
+}
+
+/**
+ * Select branch[es] of the selected/active tab[s]
+ */
+function onKeySelectTabsBranch() {
+  let tabs: (Tab | undefined)[] | undefined
+  if (Selection.isTabs()) tabs = Selection.ids().map(id => Tabs.byId[id])
+  if (!tabs) tabs = [Tabs.byId[Tabs.activeId]]
+  if (!tabs) return
+
+  Selection.resetSelection()
+
+  for (const tab of tabs) {
+    if (!tab) continue
+
+    // Skip descendants that will be selected anyway
+    if (Tabs.findAncestor(tab, pt => tabs.includes(pt))) continue
+
+    if (tab.isParent) {
+      Selection.selectTabsBranch(tab)
+    } else {
+      Selection.selectTab(tab.id)
+    }
+  }
+}
+
+/**
+ * Select descendants of the selected/active tab
+ */
+function onKeySelChildTabs() {
+  let tab
+  if (Selection.isTabs()) tab = Tabs.byId[Selection.getFirst()]
+  if (!tab) tab = Tabs.byId[Tabs.activeId]
+  if (!tab || !tab.isParent) return
+
+  Selection.resetSelection()
+
+  if (tab.folded) Tabs.expTabsBranch(tab.id)
+
+  const childTabs = Tabs.getBranch(tab, false)
+  Selection.selectTabs(childTabs.map(t => t.id))
 }
 
 /**
@@ -1503,20 +1546,6 @@ function onKeyEditTitle() {
 
   if (Tabs.byId[Tabs.editableTabId]) Tabs.onOutsideEditingExit()
   else Tabs.editTabTitle(ids)
-}
-
-function onKeySelChildTabs() {
-  let tab
-  if (Selection.isTabs()) tab = Tabs.byId[Selection.getFirst()]
-  if (!tab) tab = Tabs.byId[Tabs.activeId]
-  if (!tab || !tab.isParent) return
-
-  Selection.resetSelection()
-
-  if (tab.folded) Tabs.expTabsBranch(tab.id)
-
-  const childTabs = Tabs.getBranch(tab, false)
-  Selection.selectTabs(childTabs.map(t => t.id))
 }
 
 /**

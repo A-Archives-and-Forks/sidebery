@@ -566,6 +566,17 @@
     "zh_TW": "向下選取區間",
     "ja": "下方向の範囲選択"
   },
+  "KbSelBranch": {
+    "en": "Select the whole branch of tabs",
+    "de": "Wählen Sie den gesamten Zweig der Tabs aus",
+    "fr": "Sélectionnez toute la branche d'onglets",
+    "hu": "Válassza ki a lapok teljes ágát",
+    "pl": "Zaznacz całą gałąź kart",
+    "ru": "Выделить всю ветвь вкладок",
+    "zh_CN": "选中整个标签页分支",
+    "zh_TW": "選取整個分頁標籤樹狀結構",
+    "ja": "タブの枝全体を選択する"
+  },
   "KbSelChildTabs": {
     "en": "Select child tabs",
     "de": "Untergeordnete Tabs auswählen",

@@ -157,6 +157,9 @@
       },
       "description": "__MSG_KbDownShift__"
     },
+    "sel_tabs_branch": {
+      "description": "__MSG_KbSelBranch__"
+    },
     "sel_child_tabs": {
       "description": "__MSG_KbSelChildTabs__"
     },
