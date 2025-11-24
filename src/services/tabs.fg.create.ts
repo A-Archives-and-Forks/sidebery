@@ -1,15 +1,6 @@
-import {
-  DragInfo,
-  DstPlaceInfo,
-  ItemInfo,
-  Panel,
-  PanelType,
-  SettingsState,
-  Tab,
-  TabsPanel,
-} from 'src/types'
+import { DragInfo, DstPlaceInfo, ItemInfo, Panel, PanelType, Tab, TabsPanel } from 'src/types'
 import { ASKID, CONTAINER_ID, GROUP_URL, INITIAL_TITLE_RE, NEWID, NOID } from 'src/defaults'
-import { PRIVATE_CONTAINER_ID } from 'src/defaults'
+import { PRIVATE_CONTAINER_ID, SETTINGS_OPTIONS } from 'src/defaults'
 import { Sidebar } from 'src/services/sidebar'
 import { Tabs } from 'src/services/tabs.fg'
 import { Settings } from 'src/services/settings'
@@ -79,6 +70,7 @@ export function createChildTab(tabId: ID, url?: string, containerId?: string): v
 
 interface CreateTabInPanelConf extends browser.tabs.CreateProperties {
   fromNewTabButton?: boolean
+  position?: (typeof SETTINGS_OPTIONS.newTabInPanelPos)[number]
 }
 
 let _creatingTabInPanel = false
@@ -101,7 +93,13 @@ export async function createTabInPanel(panel: Panel, conf?: CreateTabInPanelConf
     }
   }
 
-  let index = Tabs.getIndexForNewTab(panel, conf)
+  if (conf?.position) {
+    if (conf.position === 'btn') conf.fromNewTabButton = true
+    else if (conf.position === 'start') conf.index = panel.startTabIndex
+    else if (conf.position === 'end') conf.index = panel.nextTabIndex
+  }
+
+  let index = conf?.index ?? Tabs.getIndexForNewTab(panel, conf)
   const parentId = Tabs.getParentForNewTab(panel, conf)
   if (!Utils.isTabsPanel(panel)) return
   if (index === undefined && panel.nextTabIndex > -1) index = panel.nextTabIndex

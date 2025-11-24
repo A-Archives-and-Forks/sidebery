@@ -105,6 +105,14 @@ section(ref="el")
       :folded="true"
       :opts="Settings.getOpts('navActTabsPanelLeftClickAction')"
       @update:value="Settings.saveDebounced(150)")
+    .sub-fields(v-if="Settings.state.navActTabsPanelLeftClickAction === 'new_tab'")
+      SelectField(
+        label="settings.new_tab_in_panel_pos"
+        optLabel="settings.new_tab_in_panel_pos_"
+        v-model:value="Settings.state.navActTabsPanelLeftClickTabPos"
+        :folded="true"
+        :opts="Settings.getOpts('newTabInPanelPos')"
+        @update:value="Settings.saveDebounced(150)")
     SelectField(
       label="settings.nav_act_bookmarks_panel_left_click"
       optLabel="settings.nav_act_bookmarks_panel_left_click_"
@@ -234,6 +242,14 @@ section(ref="el")
       :opts="Settings.getOpts('tabsPanelLeftClickAction')"
       :folded="true"
       @update:value="Settings.saveDebounced(150)")
+    .sub-fields(v-if="Settings.state.tabsPanelLeftClickAction === 'tab'")
+      SelectField(
+        label="settings.new_tab_in_panel_pos"
+        optLabel="settings.new_tab_in_panel_pos_"
+        v-model:value="Settings.state.tabsPanelLeftClickTabPos"
+        :folded="true"
+        :opts="Settings.getOpts('newTabInPanelPos')"
+        @update:value="Settings.saveDebounced(150)")
     SelectField(
       label="settings.tabs_panel_double_click_action"
       optLabel="settings.tabs_panel_action_"
@@ -242,6 +258,15 @@ section(ref="el")
       :opts="Settings.getOpts('tabsPanelDoubleClickAction')"
       :folded="true"
       @update:value="Settings.saveDebounced(150)")
+    .sub-fields(v-if="Settings.state.tabsPanelDoubleClickAction === 'tab'")
+      SelectField(
+        label="settings.new_tab_in_panel_pos"
+        optLabel="settings.new_tab_in_panel_pos_"
+        v-model:value="Settings.state.tabsPanelDoubleClickTabPos"
+        :inactive="Settings.state.tabsPanelLeftClickAction !== 'none'"
+        :folded="true"
+        :opts="Settings.getOpts('newTabInPanelPos')"
+        @update:value="Settings.saveDebounced(150)")
     SelectField(
       label="settings.tabs_panel_right_click_action"
       optLabel="settings.tabs_panel_action_"
@@ -256,6 +281,14 @@ section(ref="el")
       :opts="Settings.getOpts('tabsPanelMiddleClickAction')"
       :folded="true"
       @update:value="Settings.saveDebounced(150)")
+    .sub-fields(v-if="Settings.state.tabsPanelMiddleClickAction === 'tab'")
+      SelectField(
+        label="settings.new_tab_in_panel_pos"
+        optLabel="settings.new_tab_in_panel_pos_"
+        v-model:value="Settings.state.tabsPanelMiddleClickTabPos"
+        :folded="true"
+        :opts="Settings.getOpts('newTabInPanelPos')"
+        @update:value="Settings.saveDebounced(150)")
 
   .wrapper(ref="ntbEl")
     .sub-title: .text {{translate('settings.nav_settings_mouse_new_tab_button')}}

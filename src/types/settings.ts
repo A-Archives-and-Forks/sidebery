@@ -32,6 +32,7 @@ export interface SettingsState {
   navSwitchPanelsWheel: boolean
   navSwitchPanelsDelay: number
   navActTabsPanelLeftClickAction: (typeof SETTINGS_OPTIONS.navActTabsPanelLeftClickAction)[number]
+  navActTabsPanelLeftClickTabPos: (typeof SETTINGS_OPTIONS.newTabInPanelPos)[number]
   navActBookmarksPanelLeftClickAction: (typeof SETTINGS_OPTIONS.navActBookmarksPanelLeftClickAction)[number]
   navTabsPanelMidClickAction: (typeof SETTINGS_OPTIONS.navTabsPanelMidClickAction)[number]
   navBookmarksPanelMidClickAction: (typeof SETTINGS_OPTIONS.navBookmarksPanelMidClickAction)[number]
@@ -239,9 +240,12 @@ export interface SettingsState {
   tabMiddleClickShift: (typeof SETTINGS_OPTIONS.tabMiddleClickModifier)[number]
   tabCloseMiddleClick: (typeof SETTINGS_OPTIONS.tabCloseMiddleClick)[number]
   tabsPanelLeftClickAction: (typeof SETTINGS_OPTIONS.tabsPanelLeftClickAction)[number]
+  tabsPanelLeftClickTabPos: (typeof SETTINGS_OPTIONS.newTabInPanelPos)[number]
   tabsPanelDoubleClickAction: (typeof SETTINGS_OPTIONS.tabsPanelDoubleClickAction)[number]
+  tabsPanelDoubleClickTabPos: (typeof SETTINGS_OPTIONS.newTabInPanelPos)[number]
   tabsPanelRightClickAction: (typeof SETTINGS_OPTIONS.tabsPanelRightClickAction)[number]
   tabsPanelMiddleClickAction: (typeof SETTINGS_OPTIONS.tabsPanelMiddleClickAction)[number]
+  tabsPanelMiddleClickTabPos: (typeof SETTINGS_OPTIONS.newTabInPanelPos)[number]
   newTabMiddleClickAction: (typeof SETTINGS_OPTIONS.newTabAction)[number]
   bookmarksLeftClickAction: (typeof SETTINGS_OPTIONS.bookmarksLeftClickAction)[number]
   bookmarksLeftClickActivate: boolean
@@ -272,4 +276,5 @@ export interface SettingsState {
   selectActiveTabFirst: boolean
   selectCyclic: boolean
   loopPanelsIgnoreHidden: boolean
+  kbNewTabInPanelPos: (typeof SETTINGS_OPTIONS.newTabInPanelPos)[number]
 }

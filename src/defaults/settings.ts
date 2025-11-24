@@ -29,6 +29,7 @@ export const DEFAULT_SETTINGS: SettingsState = {
   hideEmptyPanels: true,
   hideDiscardedTabPanels: false,
   navActTabsPanelLeftClickAction: 'none',
+  navActTabsPanelLeftClickTabPos: 'general',
   navActBookmarksPanelLeftClickAction: 'none',
   navTabsPanelMidClickAction: 'discard',
   navBookmarksPanelMidClickAction: 'none',
@@ -240,9 +241,12 @@ export const DEFAULT_SETTINGS: SettingsState = {
   tabMiddleClickShift: 'duplicate',
   tabCloseMiddleClick: 'close',
   tabsPanelLeftClickAction: 'none',
+  tabsPanelLeftClickTabPos: 'general',
   tabsPanelDoubleClickAction: 'tab',
+  tabsPanelDoubleClickTabPos: 'general',
   tabsPanelRightClickAction: 'menu',
   tabsPanelMiddleClickAction: 'tab',
+  tabsPanelMiddleClickTabPos: 'general',
   newTabMiddleClickAction: 'new_child',
   bookmarksLeftClickAction: 'open_in_act',
   bookmarksLeftClickActivate: false,
@@ -273,6 +277,7 @@ export const DEFAULT_SETTINGS: SettingsState = {
   selectActiveTabFirst: true,
   selectCyclic: false,
   loopPanelsIgnoreHidden: false,
+  kbNewTabInPanelPos: 'general',
 }
 
 // prettier-ignore
@@ -354,4 +359,5 @@ export const SETTINGS_OPTIONS = {
   oldBookmarksAfterSave: ['ask', 'del', 'keep'],
   switchPanelAfterSwitchingTab: ['always', 'mouseleave', 'no'],
   scrollPanelAfterSwitchingTab: ['always', 'mouseleave', 'no'],
+  newTabInPanelPos: ['general', 'btn', 'start', 'end'],
 } as const

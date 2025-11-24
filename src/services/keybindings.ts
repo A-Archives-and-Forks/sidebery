@@ -561,7 +561,7 @@ function onKeyNewTabInPanel(): void {
   let panel = Sidebar.panelsById[Sidebar.activePanelId]
   if (!Utils.isTabsPanel(panel)) panel = Sidebar.panelsById[Sidebar.prevTabsPanelId]
   if (!Utils.isTabsPanel(panel)) return
-  Tabs.createTabInPanel(panel)
+  Tabs.createTabInPanel(panel, { position: Settings.state.kbNewTabInPanelPos })
 }
 
 /**

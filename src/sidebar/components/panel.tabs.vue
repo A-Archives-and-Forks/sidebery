@@ -106,7 +106,7 @@ function onMouseDown(e: MouseEvent): void {
       return Tabs.toggleBranch(targetTab.id)
     }
     if (la === 'tab') {
-      Tabs.createTabInPanel(props.panel)
+      Tabs.createTabInPanel(props.panel, { position: Settings.state.tabsPanelLeftClickTabPos })
       return
     }
     if (la === 'parent') {
@@ -120,7 +120,9 @@ function onMouseDown(e: MouseEvent): void {
   if (e.button === 1) {
     e.preventDefault()
     const ma = Settings.state.tabsPanelMiddleClickAction
-    if (ma === 'tab') Tabs.createTabInPanel(props.panel)
+    if (ma === 'tab') {
+      Tabs.createTabInPanel(props.panel, { position: Settings.state.tabsPanelMiddleClickTabPos })
+    }
     if (ma === 'undo') Tabs.undoRmTab()
     if (ma === 'rm_act_tab') {
       let actTab = Tabs.byId[Tabs.activeId]
@@ -200,13 +202,13 @@ function onDoubleClick(e: MouseEvent) {
   if (Settings.state.tabsPanelLeftClickAction !== 'none') return
   const da = Settings.state.tabsPanelDoubleClickAction
   if (da === 'tab') {
-    return Tabs.createTabInPanel(props.panel, { fromNewTabButton: true })
-  }
-  if (da === 'collapse') {
+    Tabs.createTabInPanel(props.panel, { position: Settings.state.tabsPanelDoubleClickTabPos })
+  } else if (da === 'collapse') {
     const topLvlTabs = props.panel.tabs.filter(t => t.lvl === 0)
-    if (topLvlTabs.length) return Tabs.foldAllInactiveBranches(topLvlTabs)
+    if (topLvlTabs.length) Tabs.foldAllInactiveBranches(topLvlTabs)
+  } else if (da === 'undo') {
+    Tabs.undoRmTab()
   }
-  if (da === 'undo') Tabs.undoRmTab()
 }
 
 const onWheel = Mouse.getWheelDebouncer(WheelDirection.Vertical, (e: WheelEvent) => {

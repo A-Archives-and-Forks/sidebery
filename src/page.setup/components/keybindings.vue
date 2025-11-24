@@ -66,6 +66,14 @@
     h2 {{translate('settings.kb_tabs_open')}}
     span.header-shadow
     KeybindingField.-no-separator(:keybinding="Keybindings.reactive.byName.new_tab_on_panel")
+    .sub-fields
+      SelectField(
+        label="settings.new_tab_in_panel_pos"
+        optLabel="settings.new_tab_in_panel_pos_"
+        v-model:value="Settings.state.kbNewTabInPanelPos"
+        :folded="true"
+        :opts="Settings.getOpts('newTabInPanelPos')"
+        @update:value="Settings.saveDebounced(150)")
     KeybindingField(:keybinding="Keybindings.reactive.byName.new_tab_in_group")
     KeybindingField(:keybinding="Keybindings.reactive.byName.new_tab_as_first_child")
     KeybindingField(:keybinding="Keybindings.reactive.byName.new_tab_as_last_child")
@@ -212,6 +220,7 @@ import { SetupPage, Keybindings } from 'src/services/_services'
 import { Settings } from 'src/services/settings'
 import KeybindingField from 'src/page.setup/components/keybindings.keybinding.vue'
 import ToggleField from 'src/components/toggle-field.vue'
+import SelectField from 'src/components/select-field.vue'
 import InfoField from 'src/components/info-field.vue'
 
 const el = ref<HTMLElement | null>(null)

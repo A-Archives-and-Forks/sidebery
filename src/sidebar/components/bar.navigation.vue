@@ -610,7 +610,9 @@ function onNavMouseUp(e: MouseEvent, item: NavItem, inHiddenBar?: boolean) {
     }
     if (isTabs && panel) {
       if (Settings.state.navActTabsPanelLeftClickAction === 'new_tab') {
-        return Tabs.createTabInPanel(panel)
+        return Tabs.createTabInPanel(panel, {
+          position: Settings.state.navActTabsPanelLeftClickTabPos,
+        })
       } else if (Settings.state.navActTabsPanelLeftClickAction === 'scroll') {
         return Sidebar.scrollPanelToEdge()
       }
