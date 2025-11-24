@@ -10,7 +10,6 @@ import { Settings } from 'src/services/settings'
 import { Sidebar } from 'src/services/sidebar'
 import { Windows } from 'src/services/windows'
 import { Containers } from 'src/services/containers'
-import { Keybindings } from 'src/services/keybindings'
 import { Styles } from 'src/services/styles'
 import { Bookmarks } from 'src/services/bookmarks'
 import { Menu } from 'src/services/menu'
@@ -25,7 +24,7 @@ import { Info } from 'src/services/info'
 import SidebarRoot from './sidebar.vue'
 import { Snapshots } from 'src/services/snapshots'
 import { updateWebReqHandlers } from 'src/services/web-req.fg'
-import { Sync } from 'src/services/_services'
+import { Keybindings, Sync } from 'src/services/_services'
 
 async function main(): Promise<void> {
   Info.setInstanceType(InstanceType.sidebar)

@@ -41,10 +41,9 @@
 </template>
 
 <script lang="ts" setup>
-import { Logs, Sync, Utils } from 'src/services/_services'
+import { Keybindings, Logs, Sync, Utils } from 'src/services/_services'
 import { translate } from 'src/dict'
 import { SyncedEntry } from 'src/services/sync'
-import { Keybindings } from 'src/services/keybindings'
 import { Menu } from 'src/services/menu'
 import { Settings } from 'src/services/settings'
 import { Styles } from 'src/services/styles'

@@ -84,9 +84,8 @@ import ToggleField from 'src/components/toggle-field.vue'
 import LoadingDots from 'src/components/loading-dots.vue'
 import { NormalizedSnapshot } from 'src/types/snapshots'
 import { Containers } from 'src/services/containers'
-import { Keybindings } from 'src/services/keybindings'
 import { Settings } from 'src/services/settings'
-import { IPC, SidebarConfig, Sync, SetupPage } from 'src/services/_services'
+import { IPC, SidebarConfig, Sync, SetupPage, Keybindings } from 'src/services/_services'
 
 const props = defineProps({
   importedData: {

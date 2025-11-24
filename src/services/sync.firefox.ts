@@ -1,10 +1,9 @@
 import { MenuConfs, SettingsState } from 'src/types'
 import { Settings } from './settings'
-import { Logs, Sync, Utils } from './_services'
+import { Keybindings, Logs, Sync, Utils } from './_services'
 import { Info } from './info'
 import { Store } from './storage'
 import { Menu } from './menu'
-import { Keybindings } from './keybindings'
 import { SyncedEntry } from './sync'
 
 export type KeyType = 'settings' | 'ctxMenu' | 'kb' | 'styles'

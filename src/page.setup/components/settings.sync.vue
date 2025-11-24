@@ -102,11 +102,9 @@ import { translate } from 'src/dict'
 import { Settings } from 'src/services/settings'
 import { Styles } from 'src/services/styles'
 import { Menu } from 'src/services/menu'
-import { SetupPage } from 'src/services/_services'
+import { Keybindings, SetupPage, Google, Logs, Sync } from 'src/services/_services'
 import TextField from '../../components/text-field.vue'
 import ToggleField from '../../components/toggle-field.vue'
-import { Keybindings } from 'src/services/keybindings'
-import { Google, Logs, Sync } from 'src/services/_services'
 
 const el = ref<HTMLElement | null>(null)
 const gdToggling = ref(false)
