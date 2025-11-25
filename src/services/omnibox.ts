@@ -1,10 +1,12 @@
+import { Container, InstanceType } from 'src/types'
+import { DEFAULT_CONTAINER, DEFAULT_CONTAINER_ID, NOID } from 'src/defaults'
 import { Containers } from 'src/services/containers'
 import { translate } from 'src/dict'
 import * as IPC from 'src/services/ipc'
 import * as Logs from 'src/services/logs'
+import * as Utils from 'src/utils'
 import { Tabs } from 'src/services/tabs.bg'
 import { Windows } from 'src/services/windows'
-import { Container, InstanceType } from 'src/types'
 
 function setupListeners() {
   browser.omnibox.setDefaultSuggestion({
@@ -12,9 +14,27 @@ function setupListeners() {
   })
 
   function matchContainers(input: string): Container[] {
-    return Object.values(Containers.reactive.byId).filter(container =>
-      container.name.toLowerCase().includes(input.toLowerCase())
-    )
+    if (!input) return []
+
+    const focusedWindow = Windows.byId[Windows.lastFocusedWinId ?? NOID]
+    if (focusedWindow?.incognito) return []
+
+    const activeTab = focusedWindow?.tabs?.find(t => t.active)
+    const containers = Object.values(Containers.reactive.byId)
+
+    if (activeTab?.cookieStoreId !== DEFAULT_CONTAINER_ID) {
+      const defaultContainer = Utils.clone(DEFAULT_CONTAINER)
+      defaultContainer.id = DEFAULT_CONTAINER_ID
+      defaultContainer.cookieStoreId = DEFAULT_CONTAINER_ID
+      defaultContainer.name = translate('omnibox.container_switch.default_conatiner')
+      defaultContainer.color = 'toolbar'
+      containers.unshift(defaultContainer)
+    }
+
+    return containers.filter(container => {
+      if (activeTab && activeTab.cookieStoreId === container.id) return false
+      return container.name.toLowerCase().includes(input.toLowerCase())
+    })
   }
 
   browser.omnibox.onInputChanged.addListener((input, suggest) => {

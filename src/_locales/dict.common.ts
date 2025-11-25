@@ -2787,6 +2787,9 @@ export const commonTranslations: Translations = {
   'omnibox.container_switch.prompt': {
     en: 'Type the name of the container you want for this tab…',
   },
+  'omnibox.container_switch.default_conatiner': {
+    en: 'Default container',
+  },
 }
 
 if (!window.translations) window.translations = commonTranslations
