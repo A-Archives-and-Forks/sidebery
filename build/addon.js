@@ -109,6 +109,9 @@ async function main() {
     }
   }
 
+  // Stop here if build is not ok
+  if (!buildIsOk) return
+
   // Create './dist/sidebery-X.zip' ('build.ext')
   console.log('Creating addon archive...')
   execSync('npx web-ext build --source-dir ./addon -a ./dist/ -i __tests__', {
