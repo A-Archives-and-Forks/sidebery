@@ -321,7 +321,7 @@ function getDstIndexInside(dstType: E.DropType, dst: T.DstPlaceInfo): number {
   const dstPanel = getDstPanel(dstType, dst.panelId ?? D.NOID)
   if (!dstPanel) return 0
 
-  // To the last position in branch/panel
+  // To the last position in branch / configured position in panel
   if (
     Utils.isTabsPanel(dstPanel) &&
     (dstType === E.DropType.Tabs || dstType === E.DropType.TabsPanel)
