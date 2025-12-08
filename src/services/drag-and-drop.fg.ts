@@ -332,7 +332,7 @@ function getDstIndexInside(dstType: E.DropType, dst: T.DstPlaceInfo): number {
       return parent.index + branchLen + 1
     } else {
       // Use the setting to determine whether to drop at start or end
-      return Settings.state.moveTabToPanel === 'start'
+      return Settings.state.dndTabToPanelPos === 'start'
         ? dstPanel.startTabIndex
         : (dstPanel.nextTabIndex ?? Tabs.list.length)
     }
