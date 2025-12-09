@@ -47,31 +47,6 @@ export function enableAutoReopening(excludeTabIds: ID[]) {
   }
 }
 
-async function recreateTab(
-  tab: BgTab,
-  info: browser.proxy.RequestDetails,
-  cookieStoreId?: string
-): Promise<void> {
-  let index: number | undefined
-  try {
-    index = await IPC.sidebar(tab.windowId, 'handleReopening', tab.id, cookieStoreId)
-  } catch {
-    /* itsokay */
-  }
-
-  if (index === undefined) index = tab.index
-
-  await browser.tabs.create({
-    windowId: tab.windowId,
-    url: info.url,
-    cookieStoreId,
-    active: tab.active,
-    index,
-    pinned: tab.pinned,
-  })
-  await browser.tabs.remove(tab.id)
-}
-
 async function checkIpInfoWithIPIFY_ORG(cookieStoreId: ID): Promise<IPCheckResult | null> {
   if (!cookieStoreId || !containersProxies[cookieStoreId]) return null
   ipCheckCtx = cookieStoreId
@@ -285,7 +260,7 @@ function proxyReqHandler(info: browser.proxy.RequestDetails): browser.proxy.Prox
         }
 
         incHistory[rule.ctx] = info.url
-        return Utils.GLOBAL_QUEUE.add(recreateTab, tab, info, rule.ctx)
+        return Utils.GLOBAL_QUEUE.add(Tabs.reopenTab, tab, info.url, rule.ctx)
       }
     }
 
@@ -298,7 +273,7 @@ function proxyReqHandler(info: browser.proxy.RequestDetails): browser.proxy.Prox
 
         if (ok) {
           incHistory['firefox-default'] = info.url
-          return Utils.GLOBAL_QUEUE.add(recreateTab, tab, info)
+          return Utils.GLOBAL_QUEUE.add(Tabs.reopenTab, tab, info.url)
         }
       }
     }
