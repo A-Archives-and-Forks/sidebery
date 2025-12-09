@@ -20,7 +20,7 @@ function setupListeners() {
     const focusedWindow = Windows.byId.get(Windows.lastFocusedId ?? NOID)
     if (focusedWindow?.incognito) return []
 
-    const activeTab = focusedWindow?.tabs?.find(t => t.active)
+    const activeTab = Tabs.byId[focusedWindow?.activeTabId ?? NOID]
     const containers = Object.values(Containers.reactive.byId)
 
     if (activeTab?.cookieStoreId !== DEFAULT_CONTAINER_ID) {
