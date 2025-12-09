@@ -165,6 +165,18 @@ function mutateNativeTabToSideberyTab(nativeTab: T.NativeTab): T.BgTab {
   return tab
 }
 
+export function setupListeners(): void {
+  browser.tabs.onCreated.addListener(onTabCreated)
+  browser.tabs.onRemoved.addListener(onTabRemoved)
+  browser.tabs.onUpdated.addListener(onTabUpdated, {
+    properties: ['pinned', 'title', 'status', 'favIconUrl', 'url', 'hidden', 'discarded'],
+  })
+  browser.tabs.onActivated.addListener(onTabActivated)
+  browser.tabs.onMoved.addListener(onTabMoved)
+  browser.tabs.onAttached.addListener(onTabAttached)
+  browser.tabs.onDetached.addListener(onTabDetached)
+}
+
 /**
  * Handle new tab
  */
@@ -824,14 +836,12 @@ export async function reopenTab(tab: T.BgTab, url: string, cookieStoreId?: strin
   await browser.tabs.remove(tab.id)
 }
 
-export function setupListeners(): void {
-  browser.tabs.onCreated.addListener(onTabCreated)
-  browser.tabs.onRemoved.addListener(onTabRemoved)
-  browser.tabs.onUpdated.addListener(onTabUpdated, {
-    properties: ['pinned', 'title', 'status', 'favIconUrl', 'url', 'hidden', 'discarded'],
-  })
-  browser.tabs.onActivated.addListener(onTabActivated)
-  browser.tabs.onMoved.addListener(onTabMoved)
-  browser.tabs.onAttached.addListener(onTabAttached)
-  browser.tabs.onDetached.addListener(onTabDetached)
+export function getActiveTabInLastFocusedWindow() {
+  const focusedWindow = Windows.byId.get(Windows.lastFocusedId ?? D.NOID)
+  if (!focusedWindow) {
+    Logs.warn('Tabs.getActiveTabInLastFocusedWindow: Cannot find last focused window')
+    return
+  }
+
+  return Tabs.byId[focusedWindow.activeTabId ?? D.NOID]
 }

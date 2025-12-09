@@ -3,6 +3,7 @@ import { DEFAULT_CONTAINER } from 'src/defaults'
 import * as Utils from 'src/utils'
 import * as Store from 'src/services/storage.bg'
 import * as WebReq from 'src/services/web-req.bg'
+import * as Omnibox from 'src/services/omnibox.bg'
 import * as Logs from 'src/services/logs'
 
 import * as Containers from './containers'
@@ -76,6 +77,8 @@ export function updateContainers(newContainers?: Record<ID, Container> | null): 
   Containers.reactive.byId = newContainers
 
   WebReq.updateReqHandlersDebounced(0)
+
+  Omnibox.updateCommandsDebounced(300)
 }
 
 export async function create(name: string, color: string, icon: string): Promise<Container> {
@@ -95,6 +98,8 @@ export function setupListeners(): void {
 function onContainerCreated(info: browser.contextualIdentities.ChangeInfo): void {
   Containers.onContainerCreated(info)
   saveContainers(300)
+
+  Omnibox.updateCommandsDebounced(300)
 }
 
 function onContainerRemoved(info: browser.contextualIdentities.ChangeInfo): void {
@@ -102,6 +107,8 @@ function onContainerRemoved(info: browser.contextualIdentities.ChangeInfo): void
 
   delete Containers.reactive.byId[id]
   saveContainers(300)
+
+  Omnibox.updateCommandsDebounced(300)
 }
 
 function onContainerUpdated(info: browser.contextualIdentities.ChangeInfo): void {
@@ -115,4 +122,6 @@ function onContainerUpdated(info: browser.contextualIdentities.ChangeInfo): void
   Containers.reactive.byId[id].color = container.color
 
   saveContainers(300)
+
+  Omnibox.updateCommandsDebounced(300)
 }

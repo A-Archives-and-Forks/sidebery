@@ -2795,10 +2795,13 @@ export const commonTranslations: Translations = {
   // ---
   // -- Omnibox
   // -
-  'omnibox.container_switch.prompt': {
-    en: 'Type the name of the container you want for this tab…',
+  'omnibox.default_suggestion': {
+    en: 'Choose the command (default is the first one):',
   },
-  'omnibox.container_switch.default_conatiner': {
+  'omnibox.reopen_in_ctr': {
+    en: ctr_name => `Reopen in "${ctr_name}" container`,
+  },
+  'omnibox.reopen_in_ctr.default_ctr_name': {
     en: 'Default container',
   },
 }

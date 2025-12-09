@@ -112,6 +112,7 @@ void (async function main() {
   })
 
   Omnibox.setupListeners()
+  Omnibox.load()
 
   Logs.info(`Init end: ${performance.now() - ts}ms`)
 
