@@ -20,7 +20,7 @@ import * as Settings from 'src/services/settings'
 export * from 'src/services/settings'
 
 export async function load() {
-  Settings.load()
+  await Settings.load()
   Search.parseShortcuts()
 }
 
