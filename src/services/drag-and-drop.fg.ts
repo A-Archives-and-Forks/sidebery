@@ -1428,14 +1428,21 @@ export async function onDragEnd(e: DragEvent): Promise<void> {
 
   const droppedOutside = e.x < 0 || e.x > Sidebar.width || e.y < 0 || e.y > Sidebar.height
 
-  // Dropped outside sidebar
-  if (droppedOutside && Date.now() - lastDragStartTime > 250) {
-    // If the drop effect is not 'none' it was consumed by another drop target
-    if (e.dataTransfer?.dropEffect !== 'none') return
-
-    // No drag info
-    if (!info) return
-
+  // Drop to new window
+  drop_new_win: if (
+    // Dropped outside (although there is a bug with incorrect coordinates on fast dnd that trigger
+    // opening new window when cursor is over the sidebar)
+    droppedOutside &&
+    // It's configured to open a new window on dropping outside
+    Settings.state.dndOutside === 'win' &&
+    // If the drop effect is 'none', otherwise it was consumed by another drop target
+    // and creating a new window will be non-intuitive
+    e.dataTransfer?.dropEffect === 'none' &&
+    // Drag info is set
+    info &&
+    // The last bastion against the mis-triggered new window - check time between drag start/end
+    Date.now() - lastDragStartTime > Settings.state.dndOutsideThresholdTimeout
+  ) {
     const fromTabs = info.type === E.DragType.Tabs
     const fromTabsPanel = info.type === E.DragType.TabsPanel
     const fromBookmarks = info.type === E.DragType.Bookmarks
@@ -1460,12 +1467,12 @@ export async function onDragEnd(e: DragEvent): Promise<void> {
     if (fromBookmarksPanel && info.items?.length) {
       const panelId = info.items[0]?.id ?? D.NOID
       const panel = Sidebar.panelsById[panelId]
-      if (!Utils.isBookmarksPanel(panel)) return
+      if (!Utils.isBookmarksPanel(panel)) break drop_new_win
 
       if (!Bookmarks.reactive.tree.length) await Bookmarks.load()
 
       const rootFolder = Bookmarks.reactive.byId[panel.rootId]
-      if (!rootFolder || !rootFolder.children?.length) return
+      if (!rootFolder || !rootFolder.children?.length) break drop_new_win
 
       Bookmarks.openInNewWindow(rootFolder.children.map(n => n.id))
     }

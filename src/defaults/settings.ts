@@ -56,6 +56,7 @@ export const DEFAULT_SETTINGS: SettingsState = {
   dndExpDelay: 750,
   dndExpMod: 'none',
   dndOutside: 'win',
+  dndOutsideThresholdTimeout: 350,
   dndActTabFromLink: true,
   dndActSearchTab: true,
   dndMoveTabs: false,

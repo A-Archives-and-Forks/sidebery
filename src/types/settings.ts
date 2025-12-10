@@ -55,6 +55,7 @@ export interface SettingsState {
   dndExpDelay: number
   dndExpMod: (typeof SETTINGS_OPTIONS.dndExpMod)[number]
   dndOutside: (typeof SETTINGS_OPTIONS.dndOutside)[number]
+  dndOutsideThresholdTimeout: number
   dndActTabFromLink: boolean
   dndActSearchTab: boolean
   dndMoveTabs: boolean
