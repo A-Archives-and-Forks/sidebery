@@ -486,7 +486,12 @@ export async function open(
     title: visit.title,
     active: activateFirstTab,
   }
-  const dstInfo: T.DstPlaceInfo = { windowId: Windows.id, discarded: false, panelId: dst.panelId }
+  const dstInfo: T.DstPlaceInfo = {
+    windowId: Windows.id,
+    discarded: false,
+    panelId: dst.panelId,
+    parentId: dst.parentId,
+  }
   const panel = Sidebar.panelsById[dstInfo.panelId ?? NOID]
 
   if (panel) dstInfo.panelId = panel.id
@@ -677,6 +682,7 @@ export function getMouseOpeningConf(button: number): OpeningHistoryConfig {
       }
     } else if (Utils.isTabsPanel(panel)) {
       conf.dst.index = Tabs.getIndexForNewTab(panel)
+      conf.dst.parentId = Tabs.getParentForNewTab(panel, { index: conf.dst.index })
     }
   }
 
@@ -694,6 +700,7 @@ export function getMouseOpeningConf(button: number): OpeningHistoryConfig {
       }
     } else if (Utils.isTabsPanel(panel)) {
       conf.dst.index = Tabs.getIndexForNewTab(panel)
+      conf.dst.parentId = Tabs.getParentForNewTab(panel, { index: conf.dst.index })
     }
   }
 

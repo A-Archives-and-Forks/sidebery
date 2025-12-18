@@ -373,6 +373,7 @@ export function getMouseOpeningConf(button: number): OpeningBookmarksConfig {
       }
     } else if (Utils.isTabsPanel(panel)) {
       conf.dst.index = Tabs.getIndexForNewTab(panel)
+      conf.dst.parentId = Tabs.getParentForNewTab(panel, { index: conf.dst.index })
     }
   }
 
@@ -391,6 +392,7 @@ export function getMouseOpeningConf(button: number): OpeningBookmarksConfig {
       }
     } else if (Utils.isTabsPanel(panel)) {
       conf.dst.index = Tabs.getIndexForNewTab(panel)
+      conf.dst.parentId = Tabs.getParentForNewTab(panel, { index: conf.dst.index })
     }
   }
 
