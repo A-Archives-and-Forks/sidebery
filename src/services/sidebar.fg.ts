@@ -1160,7 +1160,7 @@ async function updateSidebar(newConfig?: T.SidebarConfig): Promise<void> {
 
 export function activatePanel(panelId: ID, loadPanels = true, keepSearching?: boolean): void {
   if (activePanelId === panelId) return
-  Logs.info('Sidebar.activatePanel', panelId, loadPanels)
+  // Logs.info('Sidebar.activatePanel', panelId, loadPanels)
 
   const prevPanel = panelsById[activePanelId]
   const panel = panelsById[panelId]
