@@ -519,7 +519,7 @@ function onTabDetached(id: ID, info: browser.tabs.DetachInfo): void {
 let cacheTabsDataTimeout: number | undefined
 export function cacheTabsData(windowId: ID, tabs: T.TabCache[], delay = 300): void {
   if (!tabs) return
-  Logs.info('Tabs.cacheTabsData:', windowId)
+  // Logs.info('Tabs.cacheTabsData:', windowId)
 
   Tabs.cacheByWin[windowId] = tabs
 

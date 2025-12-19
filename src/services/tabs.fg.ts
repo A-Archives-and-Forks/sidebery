@@ -767,7 +767,7 @@ function findCachedData(
  * Save tabs data
  */
 export function cacheTabsData(delay = 300): void {
-  Logs.info('Tabs.cacheTabsData', delay)
+  // Logs.info('Tabs.cacheTabsData', delay)
 
   // Ignore private windows
   if (Windows.incognito) return
