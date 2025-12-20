@@ -10,6 +10,7 @@ import * as Notifications from 'src/services/notifications.fg'
 import * as Selection from 'src/services/selection.fg'
 import * as Popups from 'src/services/popups.fg'
 import * as Favicons from 'src/services/favicons.fg'
+import * as Search from 'src/services/search.fg'
 import * as Logs from 'src/services/logs'
 import * as Utils from 'src/utils'
 
@@ -207,8 +208,8 @@ export async function removeTabs(
 
   Tabs.sortTabIds(tabIds)
 
-  const rmChildTabsFolded = Settings.state.rmChildTabs === 'folded'
-  const rmChildTabsFoldedAll = Settings.state.rmChildTabs === 'all'
+  const rmChildTabsFolded = Settings.rmChildTabsFolded && !Search.rawValue
+  const rmChildTabsAll = Settings.rmChildTabsAll && !Search.rawValue
   const tabsMap: Record<ID, Tab> = {}
   const tabs: Tab[] = []
   const toRemove: ID[] = []
@@ -225,7 +226,7 @@ export async function removeTabs(
       if (tab.invisible) hasInvisibleTab = true
     }
 
-    if ((rmChildTabsFolded && tab.folded) || rmChildTabsFoldedAll) {
+    if ((rmChildTabsFolded && tab.folded) || rmChildTabsAll) {
       for (let t, i = tab.index + 1; i < Tabs.list.length; i++) {
         t = Tabs.list[i]
         if (!t || t.lvl <= tab.lvl) break

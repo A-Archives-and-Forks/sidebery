@@ -675,7 +675,7 @@ function discardOrCloseTabs(selectedTabs: ID[]): void {
  * Select this tab
  */
 function select(): void {
-  if (!tab.pinned && tab.isParent && tab.folded) {
+  if (!tab.pinned && tab.isParent && tab.folded && !Search.rawValue) {
     Selection.selectTabsBranch(tab)
   } else {
     Selection.selectTab(tab.id)

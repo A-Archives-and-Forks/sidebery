@@ -1204,6 +1204,8 @@ function onTabRemoved(tabId: ID, info: browser.tabs.RemoveInfo, detached?: boole
     const toRemove = []
     const outdentOnlyFirstChild = !autoGroup && Settings.state.treeRmOutdent === 'first_child'
     const firstChild = nextTab
+    const rmFoldedChildTabs = Settings.rmChildTabsFolded && !Search.rawValue
+    const rmAllChildTabs = Settings.rmChildTabsAll && !Search.rawValue
 
     // Handle reopening tab in different container
     if (tab.reopening && tab.reopening.id !== D.NOID) {
@@ -1240,8 +1242,8 @@ function onTabRemoved(tabId: ID, info: browser.tabs.RemoveInfo, detached?: boole
       const willBeRemoved = t.removing
       if (!willBeRemoved) {
         const shouldBeRemoved =
-          (Settings.state.rmChildTabs === 'folded' && tab.folded && !detached && !tab.reopening) ||
-          (Settings.state.rmChildTabs === 'all' && !detached && !tab.reopening)
+          (rmFoldedChildTabs && tab.folded && !detached && !tab.reopening) ||
+          (rmAllChildTabs && !detached && !tab.reopening)
         // Remove folded tabs
         if (shouldBeRemoved) {
           toRemove.push(t.id)
