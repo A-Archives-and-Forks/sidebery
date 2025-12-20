@@ -361,6 +361,9 @@ export async function move(
   if (Settings.state.hideFoldedTabs || (Settings.state.hideInact && panelIsChanged)) {
     Tabs.updateNativeTabsVisibility()
   }
+
+  // Update filtered results
+  if (Search.rawValue) Search.search()
 }
 
 /**

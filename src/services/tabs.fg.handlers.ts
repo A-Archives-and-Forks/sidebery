@@ -1010,6 +1010,9 @@ function onTabUpdated(tabId: ID, change: browser.tabs.ChangeInfo, nativeTab: Nat
     if (tab.audible || tab.mediaPaused || tab.mutedInfo?.muted) {
       Sidebar.updateMediaStateOfPanelDebounced(100, tab.panelId, tab)
     }
+
+    // Update filtered results
+    if (Search.rawValue) Search.searchDebounced(300)
   }
 
   // Handle pinned tab
@@ -1050,6 +1053,9 @@ function onTabUpdated(tabId: ID, change: browser.tabs.ChangeInfo, nativeTab: Nat
         Tabs.createTabInPanel(actualPanel)
       }
     }
+
+    // Update filtered results
+    if (Search.rawValue) Search.searchDebounced(300)
   }
 
   // Colorize branch
@@ -1553,6 +1559,9 @@ function onTabMoved(id: ID, info: browser.tabs.MoveInfo): void {
   if (!mvLen) Tabs.updateSuccessionDebounced(0)
 
   if (nativeTabsVisibilityUpdateNeeded) Tabs.updateNativeTabsVisibility()
+
+  // Update filtered results
+  if (Search.rawValue) Search.searchDebounced(300)
 }
 
 const ignoreMoveEventsReasons = new Set<string>()
