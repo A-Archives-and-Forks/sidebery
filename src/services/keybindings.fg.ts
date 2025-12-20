@@ -192,14 +192,8 @@ function onCmd(name: string): void {
   else if (name === 'sel_next_panel') Sidebar.selectPanel?.(1)
   else if (name === 'sel_prev_panel') Sidebar.selectPanel?.(-1)
   else if (name === 'activate') onKeyActivate()
-  else if (name === 'reset_selection') {
-    if (Windows.reactive.choosing) Windows.closeWindowsPopup()
-    if (!Selection.isSet() && Sidebar.subPanelActive) Sidebar.closeSubPanel()
-    Selection.resetSelection()
-    Menu.close()
-    if (Sidebar.reactive.hiddenPanelsPopup) Sidebar.reactive.hiddenPanelsPopup = false
-    if (Search.reactive.barIsShowed) Search.close()
-  } else if (name === 'select_all') onKeySelectAll()
+  else if (name === 'reset_selection') Sidebar.resetOrCancelInteraction()
+  else if (name === 'select_all') onKeySelectAll()
   else if (name === 'up') onKeySelect(-1)
   else if (name === 'down') onKeySelect(1)
   else if (name === 'up_shift') onKeySelectExpand(-1)

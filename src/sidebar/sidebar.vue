@@ -248,61 +248,7 @@ function onFocusOut(e: FocusEvent): void {
 function onDocumentKeydown(e: KeyboardEvent): void {
   // Close popups
   if (e.code === 'Escape') {
-    // Context menu
-    if (Menu.isOpen) {
-      Menu.close()
-      return
-    }
-
-    // Selection
-    if (Selection.isSet()) Selection.resetSelection()
-
-    // Confirm popup
-    if (Popups.reactive.confirm) Popups.reactive.confirm = null
-
-    // Windows popup
-    if (Windows.reactive.choosing) Windows.closeWindowsPopup()
-
-    // Bookmarks popup
-    if (Bookmarks.reactive.popup?.close) Bookmarks.reactive.popup.close()
-
-    // Panel config popup
-    if (Popups.reactive.panelConfigPopup) Popups.closePanelPopup()
-
-    // Conatiner config popup
-    if (Popups.reactive.containerConfigPopup) Popups.closeContainerPopup()
-
-    // Group config popup
-    if (Popups.reactive.groupConfigPopup) {
-      Popups.reactive.groupConfigPopup.done(E.GroupConfigResult.Cancel)
-      Popups.reactive.groupConfigPopup = null
-    }
-
-    // Dialog popup
-    if (Popups.reactive.dialog) Popups.reactive.dialog.result(null)
-
-    // Hidden panels popup
-    if (Sidebar.reactive.hiddenPanelsPopup) {
-      Sidebar.closeHiddenPanelsPopup()
-    }
-
-    // New tab shortcuts popup
-    if (Popups.reactive.newTabShortcutsPopup) {
-      Popups.closeNewTabShortcutsPopup()
-    }
-
-    // Search bar
-    if (Search.reactive.barIsShowed && Settings.state.searchBarMode === 'dynamic') {
-      Search.stop()
-    } else if (Search.rawValue) {
-      Search.stop()
-    }
-
-    // Sub-panel
-    if (Sidebar.subPanelActive) Sidebar.closeSubPanel()
-
-    // Site config popup
-    if (Popups.reactive.siteConfigPopup) Popups.closeSiteConfigPopup()
+    Sidebar.resetOrCancelInteraction()
   }
 
   // Confirm popups

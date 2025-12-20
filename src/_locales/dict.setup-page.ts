@@ -7059,6 +7059,91 @@ Przykłady: "*", "ctrl+$", "ctrl+alt+g"`,
     zh_TW: '一般',
     ja: '一般',
   },
+  'settings.kb_select_act_note': {
+    en: `- Activate selected tab
+- Open selected bookmark
+- Fold/unfold an active tab branch or a selected bookmarks folder
+- Activate selected context-menu option
+- Activate selected panel`,
+    de: `- Aktiviere ausgewählten Tab
+- Öffne ausgewähltes Lesezeichen
+- Klappe aktiven Tab-Zweig oder ausgewählten Lesezeichen-Ordner ein/aus
+- Aktiviere ausgewählte Kontextmenü-Option
+- Aktiviere ausgewähltes Panel`,
+    fr: `– Activer l’onglet sélectionné
+– Ouvrir le marque-page
+– Replier/déplier une branche d’onglets active ou un dossier de marque-pages sélectionné
+– Activer l'option du menu contextuel sélectionnée
+– Activer le panneau sélectionné`,
+    hu: `– A kijelölt lap aktiválása
+– A kijelölt könyvjelző megnyitása
+– Az aktív lap ágának vagy a kijelölt könyvjelzőmappának a becsukása/kinyitása
+– A környezeti menü kijelölt elemének aktiválása
+– A kijelölt panel aktiválása`,
+    pl: `- Aktywuj zaznaczoną kartę
+- Otwórz zaznaczoną zakładkę
+- Złóż/rozwiń aktywną gałąź kart lub zaznacz folder zakładek
+- Aktywuj zaznaczoną opcję menu kontekstowego
+- Aktywuj wybrany panel`,
+    ru: `- Активировать выделенную вкладку
+- Открыть выделенную закладку
+- Свернуть/развернуть ветку активной вкладки или выделенную папку закладок
+- Активировать выделенный пункт контекстного меню
+- Активировать выделенную панель`,
+    zh_CN: `- 激活选定的标签页
+- 打开选定的书签
+- 折叠/展开活动标签页分支或选定的书签文件夹
+- 激活选定的上下文菜单选项
+- 激活选定的面板`,
+    zh_TW: `- 啟動選定的分頁
+- 開啟選定的書籤
+- 折疊/展開當前分頁分支或選定的書籤資料夾
+- 啟動選定的快捷選單選項
+- 啟動選定的面板`,
+    ja: `- 選択したタブをアクティブ化する
+- 選択したブックマークを開く
+- アクティブなタブのブランチまたは選択したブックマークフォルダの折りたたみ/展開
+- 選択したコンテキストメニューオプションをアクティブ化する
+- 選択したパネルをアクティブ化する`,
+  },
+  'settings.kb_reset_selection_note': {
+    en: `- Close non-native context menu
+- Reset selection
+- Exit from search mode
+- Close sub-panel and popups`,
+    de: `- Nicht natives Kontextmenü schließen
+- Auswahl zurücksetzen
+- Suchmodus beenden
+- Unterfenster und Popups schließen`,
+    fr: `- Fermer le menu contextuel non natif
+- Réinitialiser la sélection
+- Quitter le mode recherche
+- Fermer le sous-panneau et les fenêtres contextuelles`,
+    hu: `- Nem natív helyi menü bezárása
+- Kiválasztás visszaállítása
+- Keresési módból való kilépés
+- Alpanel és felugró ablakok bezárása`,
+    pl: `- Zamknij obce menu kontekstowe
+- Zresetuj wybór
+- Wyjdź z trybu wyszukiwania
+- Zamknij podpanel i wyskakujące okienka`,
+    ru: `- Закрыть неродное контекстное меню
+- Сбросить выделение
+- Выйти из режима поиска
+- Закрыть подпанель и всплывающие окна`,
+    zh_CN: `- 关闭非原生上下文菜单
+- 取消选中
+- 退出搜索模式
+- 关闭子面板和弹出窗口`,
+    zh_TW: `- 關閉非原生上下文選單
+- 取消選取狀態
+- 退出搜尋模式
+- 關閉子面板與浮動視窗`,
+    ja: `- 非ネイティブのコンテキストメニューを閉じる
+- 選択を解除する
+- 検索モードを終了する
+- サブパネルとポップアップウィンドウを閉じる`,
+  },
   'settings.kb_menu_note': {
     en: "Note: A non-native menu will open, since it's not possible to open the native menu programmatically.",
     de: 'Hinweis: Es wird ein nicht-natives Menü geöffnet, da es nicht möglich ist, das native Menü programmgesteuert zu öffnen.',
@@ -7253,23 +7338,6 @@ Przykłady: "*", "ctrl+$", "ctrl+alt+g"`,
     zh_CN: '循环',
     zh_TW: '循環',
     ja: '循環',
-  },
-  'settings.kb_select_act_note': {
-    en: '- activate selected tab\n- open selected bookmark\n- fold/unfold an active tab branch or a selected bookmarks folder\n- activate selected context-menu option\n- activate selected panel',
-    de: '- Aktiviere ausgewählten Tab\n- Öffne ausgewähltes Lesezeichen\n- Klappe aktiven Tab-Zweig oder ausgewählten Lesezeichen-Ordner ein/aus\n- Aktiviere ausgewählte Kontextmenü-Option\n- Aktiviere ausgewähltes Panel',
-    fr: `– activer l’onglet sélectionné
-– ouvrir le marque-page
-– replier/déplier une branche d’onglets active ou un dossier de marque-pages sélectionné
-– activer l'option du menu contextuel sélectionnée
-– activer le panneau sélectionné`,
-    hu: '– A kijelölt lap aktiválása\n– A kijelölt könyvjelző megnyitása\n– Az aktív lap ágának vagy a kijelölt könyvjelzőmappának a becsukása/kinyitása\n– A környezeti menü kijelölt elemének aktiválása\n– A kijelölt panel aktiválása',
-    pl: '- aktywuj zaznaczoną kartę\n- otwórz zaznaczoną zakładkę\n- złóż/rozwiń aktywną gałąź kart lub zaznacz folder zakładek\n- aktywuj zaznaczoną opcję menu kontekstowego\n- aktywuj wybrany panel',
-    ru: '- активировать выделенную вкладку\n- открыть выделенную закладку\n- свернуть/развернуть ветку активной вкладки или выделенную папку закладок\n- активировать выделенный пункт контекстного меню\n- активировать выделенную панель',
-    zh_CN:
-      '- 激活选定的标签页\n- 打开选定的书签\n- 折叠/展开活动标签页分支或选定的书签文件夹\n- 激活选定的上下文菜单选项\n- 激活选定的面板',
-    zh_TW:
-      '- 啟動選定的分頁\n- 開啟選定的書籤\n- 折疊/展開當前分頁分支或選定的書籤資料夾\n- 啟動選定的快捷選單選項\n- 啟動選定的面板',
-    ja: '- 選択したタブをアクティブ化する\n- 選択したブックマークを開く\n- アクティブなタブのブランチまたは選択したブックマークフォルダの折りたたみ/展開\n- 選択したコンテキストメニューオプションをアクティブ化する\n- 選択したパネルをアクティブ化する',
   },
   'settings.kb_unloading_tabs': {
     en: 'Unload tabs',

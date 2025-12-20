@@ -4,6 +4,10 @@
     h2 {{translate('settings.kb_general')}}
     span.header-shadow
     KeybindingField.-no-separator(:keybinding="Keybindings.reactive.byName._execute_sidebar_action")
+    KeybindingField(:keybinding="Keybindings.reactive.byName.activate")
+    .info {{translate('settings.kb_select_act_note')}}
+    KeybindingField(:keybinding="Keybindings.reactive.byName.reset_selection")
+    .info {{translate('settings.kb_reset_selection_note')}}
     KeybindingField(:keybinding="Keybindings.reactive.byName.search")
     KeybindingField(:keybinding="Keybindings.reactive.byName.hide_act_panel")
     KeybindingField(:keybinding="Keybindings.reactive.byName.create_snapshot")
@@ -111,9 +115,6 @@
       KeybindingField(:keybinding="Keybindings.reactive.byName.sel_tabs_branch")
       KeybindingField(:keybinding="Keybindings.reactive.byName.sel_child_tabs")
       KeybindingField(:keybinding="Keybindings.reactive.byName.lock_selection")
-    KeybindingField(:keybinding="Keybindings.reactive.byName.reset_selection")
-    KeybindingField(:keybinding="Keybindings.reactive.byName.activate")
-    .info {{translate('settings.kb_select_act_note')}}
 
   section
     h2 {{translate('settings.kb_unloading_tabs')}}

@@ -2794,3 +2794,69 @@ export function attachSelLenBadgeToBkm(panelId: ID, bkmId?: ID | null) {
   const el = document.getElementById('bookmark' + panelId + bkmId)
   reactive.selLenBadgeTarget = el
 }
+
+/**
+ * Close popups, dialogs, context menu, sub-panels, reset selection etc...
+ */
+export function resetOrCancelInteraction() {
+  // Context menu
+  if (Menu.isOpen) {
+    Menu.close()
+    return
+  }
+
+  // Selection
+  if (Selection.isSet()) {
+    Selection.resetSelection()
+    return
+  }
+
+  // Searching
+  if (
+    (Search.reactive.barIsShowed && Settings.state.searchBarMode === 'dynamic') ||
+    Search.rawValue
+  ) {
+    Search.stop()
+    return
+  }
+
+  // Sub-panel
+  if (subPanelActive) closeSubPanel()
+
+  // Confirm popup
+  if (Popups.reactive.confirm) Popups.reactive.confirm = null
+
+  // Windows popup
+  if (Windows.reactive.choosing) Windows.closeWindowsPopup()
+
+  // Bookmarks popup
+  if (Bookmarks.reactive.popup?.close) Bookmarks.reactive.popup.close()
+
+  // Panel config popup
+  if (Popups.reactive.panelConfigPopup) Popups.closePanelPopup()
+
+  // Conatiner config popup
+  if (Popups.reactive.containerConfigPopup) Popups.closeContainerPopup()
+
+  // Group config popup
+  if (Popups.reactive.groupConfigPopup) {
+    Popups.reactive.groupConfigPopup.done(E.GroupConfigResult.Cancel)
+    Popups.reactive.groupConfigPopup = null
+  }
+
+  // Dialog popup
+  if (Popups.reactive.dialog) Popups.reactive.dialog.result(null)
+
+  // Hidden panels popup
+  if (reactive.hiddenPanelsPopup) {
+    closeHiddenPanelsPopup()
+  }
+
+  // New tab shortcuts popup
+  if (Popups.reactive.newTabShortcutsPopup) {
+    Popups.closeNewTabShortcutsPopup()
+  }
+
+  // Site config popup
+  if (Popups.reactive.siteConfigPopup) Popups.closeSiteConfigPopup()
+}

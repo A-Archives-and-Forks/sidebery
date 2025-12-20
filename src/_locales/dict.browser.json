@@ -36,6 +36,28 @@
     "zh_TW": "開啟/關閉側邊欄面板",
     "ja": "サイドバーのパネルを開く/閉じる"
   },
+  "KbActivate": {
+    "en": "Activate/Apply",
+    "de": "Aktivieren/Anwenden",
+    "fr": "Activer/Appliquer",
+    "hu": "Aktiválás/Alkalmazás",
+    "pl": "Aktywuj/Zastosuj",
+    "ru": "Активировать/Применить",
+    "zh_CN": "激活/应用",
+    "zh_TW": "啟用/套用",
+    "ja": "有効化/適用"
+  },
+  "KbResetSelection": {
+    "en": "Cancel/Reset",
+    "de": "Abbrechen/Zurücksetzen",
+    "fr": "Annuler/Réinitialiser",
+    "hu": "Mégse/Visszaállítás",
+    "pl": "Anuluj/Resetuj",
+    "ru": "Отмена/Сброс",
+    "zh_CN": "取消/重置",
+    "zh_TW": "取消/重設",
+    "ja": "キャンセル/リセット"
+  },
   "KbSearch": {
     "en": "Search",
     "de": "Suche",
@@ -598,28 +620,6 @@
     "zh_CN": "锁定/解锁选择",
     "zh_TW": "鎖定/解鎖選取",
     "ja": "選択のロック/ロック解除"
-  },
-  "KbResetSelection": {
-    "en": "Reset selection",
-    "de": "Auswahl zurücksetzen",
-    "fr": "Réinitialiser la sélection",
-    "hu": "A kijelölés megszüntetése",
-    "pl": "Resetuj zaznaczenie",
-    "ru": "Сбросить выделение",
-    "zh_CN": "重置选择",
-    "zh_TW": "取消選取",
-    "ja": "選択をリセット"
-  },
-  "KbActivate": {
-    "en": "Activate selection",
-    "de": "Auswahl aktivieren oder aktiven Tab-Zweig oder ausgewählten Lesezeichenordner ein-/ausklappen",
-    "fr": "Activer la sélection",
-    "hu": "A kijelölés aktiválása",
-    "pl": "Aktywuj zaznaczenie",
-    "ru": "Активировать выделенное или свернуть/развернуть ветку активной вкладки или выбранную папку закладок",
-    "zh_CN": "激活或折叠/展开选定的项目",
-    "zh_TW": "啟動或折疊/展開選定的項目",
-    "ja": "選択をアクティブ化または選択したブックマークフォルダを展開/折りたたむ"
   },
   "KbUnloadTabs": {
     "en": "Unload selected/active tabs",

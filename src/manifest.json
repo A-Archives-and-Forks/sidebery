@@ -74,6 +74,18 @@
       },
       "description": "__MSG_KbOpenSidebarPanel__"
     },
+    "activate": {
+      "suggested_key": {
+        "default": "Alt+Space"
+      },
+      "description": "__MSG_KbActivate__"
+    },
+    "reset_selection": {
+      "suggested_key": {
+        "default": "Alt+R"
+      },
+      "description": "__MSG_KbResetSelection__"
+    },
     "loop_panels_forwards": {
       "description": "__MSG_KbLoopPanelsForwards__"
     },
@@ -165,18 +177,6 @@
     },
     "lock_selection": {
       "description": "__MSG_KbLockSel__"
-    },
-    "reset_selection": {
-      "suggested_key": {
-        "default": "Alt+R"
-      },
-      "description": "__MSG_KbResetSelection__"
-    },
-    "activate": {
-      "suggested_key": {
-        "default": "Alt+Space"
-      },
-      "description": "__MSG_KbActivate__"
     },
     "menu": {
       "description": "__MSG_KbMenu__"
