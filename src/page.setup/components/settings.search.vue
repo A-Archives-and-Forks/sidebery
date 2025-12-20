@@ -19,6 +19,10 @@ section(ref="el")
     label="settings.search_tab_switch"
     v-model:value="Settings.state.searchTabSwitch"
     @update:value="Settings.saveDebounced(150)")
+  ToggleField(
+    label="settings.search_menu_trigger"
+    v-model:value="Settings.state.searchMenuTrig"
+    @update:value="Settings.saveDebounced(150)")
   InfoField(
     label="settings.search.shortcuts"
     :value="translate('settings.search.shortcuts.note')")

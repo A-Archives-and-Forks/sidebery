@@ -344,7 +344,7 @@ function createNativeOption(
   optProps.onclick = () => {
     if (option.onClick) option.onClick()
     Selection.resetSelection()
-    Search.stop()
+    if (!Settings.state.searchMenuTrig) Search.stop()
   }
 
   browser.menus.create(optProps)

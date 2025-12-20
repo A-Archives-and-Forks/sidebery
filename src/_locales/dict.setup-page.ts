@@ -2510,6 +2510,9 @@ You can also set prefixes for each command type for faster navigation. Starting 
   'settings.search_tab_switch': {
     en: 'Keep searching after switching tabs',
   },
+  'settings.search_menu_trigger': {
+    en: 'Keep searching after triggering the context menu option',
+  },
   'settings.search.shortcuts': {
     en: 'Shortcuts',
     de: 'Tastenkombinationen',
