@@ -486,6 +486,9 @@ async function onTabCreated(nativeTab: NativeTab, attached?: boolean) {
   Tabs.reactivateTab(tab)
   Sidebar.recalcTabsPanels()
   if (!tab.invisible) Sidebar.addToVisibleTabs(panel.id, tab)
+  else if (Search.rawValue && Sidebar.activePanelId === tab.panelId && !Sidebar.subPanelActive) {
+    Search.searchDebounced(300)
+  }
   Tabs.updateUrlCounter(tab.url, 1)
 
   // Update tree
