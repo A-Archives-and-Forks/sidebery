@@ -677,16 +677,10 @@ function calcTabsBounds(panel: T.TabsPanel): T.ItemBounds[] {
   const insideB = (half >> 1) + marginB - 2
 
   let overallHeight = -marginA
-  let tabs = Tabs.list
-  if (panel?.filteredTabs) {
-    tabs = []
-    for (const rTab of panel.filteredTabs) {
-      const tab = Tabs.byId[rTab.id]
-      if (tab) tabs.push(tab)
-    }
-  }
+  const tabs = panel?.filteredTabs ?? Tabs.list
+  const filtered = !!panel?.filteredTabs
   for (const tab of tabs) {
-    if (tab.invisible || tab.pinned) continue
+    if ((!filtered && tab.invisible) || tab.pinned) continue
     if (tab.panelId !== panel.id) continue
 
     result.push({
