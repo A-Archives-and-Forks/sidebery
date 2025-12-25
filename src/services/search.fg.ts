@@ -333,14 +333,10 @@ export function searchDebounced(delay: number, value?: string) {
 
 let query = ''
 let beforeSwitchingPanelId: ID | undefined
+const regexCJK = /[\u4E00-\u9FFF,\u3400-\u4DBF,\u3040-\u312F,\uAC00-\uD7A3]/g
 export function search(value?: string): void {
   if (value !== undefined) {
-    const regexCJK = /[\u4E00-\u9FFF,\u3400-\u4DBF,\u3040-\u312F,\uAC00-\uD7A3]/g
-    //CJK Unified Ideographs
-    //CJK Unified Ideographs Extension A
-    //Hiragana, Katakana, Bopomofo
-    //Hangul Syllables
-    if (value.length < MIN_SEARCH_QUERY_LEN) value = value.match(regexCJK) === null ? '' : value
+    if (value.length < MIN_SEARCH_QUERY_LEN && !regexCJK.test(value)) value = ''
     if (Search.reactive.value === value) return
 
     prevValue = reactive.value
