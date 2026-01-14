@@ -924,6 +924,7 @@ declare namespace browser {
       children?: TreeNode[]
       dateAdded?: number
       dateGroupModified?: number
+      unmodifiable?: 'managed'
       parentId?: ID
       title: string
       type: TreeNodeType
