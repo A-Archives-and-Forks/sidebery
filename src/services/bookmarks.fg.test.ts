@@ -6,6 +6,24 @@ import { addMTTab, resetMTabs, setDefaultMTabPanel } from 'src/defaults/mocks.ta
 import { PanelType } from 'src/enums'
 import { addMPanel, resetMSidebar } from 'src/defaults/mocks.sidebar.fg'
 
+describe('Bookmarks.BkmNode', () => {
+  afterEach(() => {
+    Bookmarks.unload()
+  })
+
+  test('set title', () => {
+    const bkm = new Bookmarks.TESTING.BkmNode({ type: 'bookmark', id: 'abc', title: 'AAA' })
+    bkm.setTitle('BBB')
+    expect(bkm.parsedTitle).toBe('BBB')
+  })
+
+  test('set empty title', () => {
+    const bkm = new Bookmarks.TESTING.BkmNode({ type: 'bookmark', id: 'abc', title: 'AAA' })
+    bkm.setTitle('')
+    expect(bkm.parsedTitle).toBe('')
+  })
+})
+
 describe('Bookmarks.getMouseOpeningConf()', () => {
   beforeEach(() => {
     Sidebar.setReadyState(true)

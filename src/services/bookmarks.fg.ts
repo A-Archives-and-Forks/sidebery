@@ -150,8 +150,6 @@ class BkmNode {
   }
 
   #parseTitle() {
-    if (!this.title) return
-
     let parsedTitle = this.title
 
     const pinIndex = parsedTitle.indexOf(' ' + D.PIN_MARK)
@@ -801,7 +799,7 @@ export async function createBookmarkNode(
       location: parentId,
       controls: [{ label: 'btn.create' }],
       validate: popupState => {
-        popupState.nameValid = !!popupState.name
+        popupState.nameValid = true
         popupState.urlValid = !!popupState.url
       },
     })
@@ -839,7 +837,7 @@ export async function editBookmarkNode(target: BkmNode): Promise<void> {
     urlField: isBookmark,
     controls: [{ label: 'btn.save' }],
     validate: popupState => {
-      popupState.nameValid = !!popupState.name
+      popupState.nameValid = true
       popupState.urlValid = !popupState.urlField || !!popupState.url
 
       if (popupState.controls) {
@@ -1982,4 +1980,8 @@ function onBookmarkRemoved(id: ID, info: browser.bookmarks.RemoveInfo): void {
     if (node.url) Links.rmBkm(node)
     ancestorsUpdBuffer.add(node)
   }
+}
+
+export const TESTING = {
+  BkmNode,
 }

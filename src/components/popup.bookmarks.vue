@@ -113,7 +113,7 @@ const selectedFolder = computed((): string => {
   if (location === NOID) return '---'
   let folder = Bookmarks.byId.get(location)
   if (!folder || folder.type !== BkmType.Folder) return '---'
-  return folder.title
+  return folder.title || '---'
 })
 
 const path = computed<string>(() => {
