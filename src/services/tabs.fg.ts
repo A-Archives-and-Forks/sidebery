@@ -299,8 +299,6 @@ export function unload(): void {
   recentlyRemoved = []
 
   Links.rmAllTabs()
-  Tabs.setShadowMode(false)
-  Tabs.setShadowReady(false)
 
   tabsReinitializing = false
   removedTabs = []

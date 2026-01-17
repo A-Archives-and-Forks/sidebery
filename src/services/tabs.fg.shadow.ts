@@ -1,22 +1,21 @@
-import { Tab } from 'src/types'
 import * as Logs from 'src/services/logs'
 import * as Tabs from 'src/services/tabs.fg'
 import * as Windows from 'src/services/windows.fg'
 import * as Links from 'src/services/links'
 
+export let shadowList: browser.tabs.Tab[] = []
+export let shadowById: Partial<Record<ID, browser.tabs.Tab>> = {}
 export let shadowMode = false
-export const setShadowMode = (s: boolean) => (shadowMode = s)
 export let shadowReady = false
-export const setShadowReady = (s: boolean) => (shadowReady = s)
 
 export async function loadInShadowMode(): Promise<void> {
   setupShadowListeners()
   shadowMode = true
-  const tabs = (await browser.tabs.query({ windowId: browser.windows.WINDOW_ID_CURRENT })) as Tab[]
+  const tabs = await browser.tabs.query({ windowId: browser.windows.WINDOW_ID_CURRENT })
 
-  Tabs.setList(tabs)
+  shadowList = tabs
   for (const tab of tabs) {
-    Tabs.byId[tab.id] = tab
+    shadowById[tab.id] = tab
     Links.addTab(tab)
   }
 
@@ -33,8 +32,8 @@ export async function loadInShadowMode(): Promise<void> {
 export function unloadShadowed(): void {
   Tabs.resetShadowListeners()
 
-  Tabs.setById({})
-  Tabs.setList([])
+  shadowById = {}
+  shadowList = []
   shadowMode = false
   shadowReady = false
 
@@ -54,7 +53,7 @@ export function setupShadowListeners(): void {
 }
 
 export function resetShadowListeners(): void {
-  browser.tabs.onCreated.removeListener(onShadowTabCreated as (tab: browser.tabs.Tab) => void)
+  browser.tabs.onCreated.removeListener(onShadowTabCreated)
   browser.tabs.onUpdated.removeListener(onShadowTabUpdated)
   browser.tabs.onRemoved.removeListener(onShadowTabRemoved)
   browser.tabs.onMoved.removeListener(onShadowTabMoved)
@@ -69,11 +68,11 @@ function onShadowTabCreated(tab: browser.tabs.Tab): void {
     Tabs.deferredEventHandling.push(() => onShadowTabCreated(tab))
     return
   }
-  Tabs.byId[tab.id] = tab as Tab
-  Tabs.list.splice(tab.index, 0, tab as Tab)
-  const len = Tabs.list.length
+  shadowById[tab.id] = tab
+  shadowList.splice(tab.index, 0, tab)
+  const len = shadowList.length
   for (let i = tab.index; i < len; i++) {
-    Tabs.list[i].index = i
+    shadowList[i].index = i
   }
 
   Links.addTab(tab)
@@ -89,7 +88,7 @@ function onShadowTabUpdated(
     Tabs.deferredEventHandling.push(() => onShadowTabUpdated(tabId, change, tab))
     return
   }
-  const targetTab = Tabs.byId[tabId]
+  const targetTab = shadowById[tabId]
   if (!targetTab) return
 
   if (change.url !== undefined && targetTab.url !== change.url) {
@@ -105,20 +104,20 @@ function onShadowTabRemoved(tabId: ID, info: browser.tabs.RemoveInfo): void {
     Tabs.deferredEventHandling.push(() => onShadowTabRemoved(tabId, info))
     return
   }
-  const targetTab = Tabs.byId[tabId]
+  const targetTab = shadowById[tabId]
   if (!targetTab) return
 
   let index = targetTab.index
-  if (targetTab !== Tabs.list[index]) index = Tabs.list.findIndex(t => t.id === tabId)
+  if (targetTab !== shadowList[index]) index = shadowList.findIndex(t => t.id === tabId)
   if (index !== -1) {
-    Tabs.list.splice(index, 1)
-    const len = Tabs.list.length
+    shadowList.splice(index, 1)
+    const len = shadowList.length
     for (let i = index; i < len; i++) {
-      Tabs.list[i].index = i
+      shadowList[i].index = i
     }
   }
 
-  delete Tabs.byId[tabId]
+  delete shadowById[tabId]
 
   Links.rmTab(targetTab)
 }
@@ -130,11 +129,11 @@ function onShadowTabMoved(id: ID, info: browser.tabs.MoveInfo): void {
     return
   }
 
-  const movedTab = Tabs.list.splice(info.fromIndex, 1)[0]
-  Tabs.list.splice(info.toIndex, 0, movedTab)
+  const movedTab = shadowList.splice(info.fromIndex, 1)[0]
+  shadowList.splice(info.toIndex, 0, movedTab)
 
-  for (let i = Tabs.list.length; i--; ) {
-    Tabs.list[i].index = i
+  for (let i = shadowList.length; i--; ) {
+    shadowList[i].index = i
   }
 }
 
@@ -166,8 +165,8 @@ function onShadowTabActivated(info: browser.tabs.ActiveInfo): void {
     return
   }
 
-  const prevTab = Tabs.byId[info.previousTabId]
-  const targetTab = Tabs.byId[info.tabId]
+  const prevTab = shadowById[info.previousTabId]
+  const targetTab = shadowById[info.tabId]
   if (prevTab) prevTab.active = false
   if (targetTab) targetTab.active = true
 }
