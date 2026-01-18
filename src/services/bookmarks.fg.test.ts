@@ -22,6 +22,19 @@ describe('Bookmarks.BkmNode', () => {
     bkm.setTitle('')
     expect(bkm.parsedTitle).toBe('')
   })
+
+  test('addBkm', () => {
+    const bkm = new Bookmarks.TESTING.BkmNode({ type: 'folder', id: 'a', title: 'A', children: [] })
+    const b1 = new Bookmarks.TESTING.BkmNode({ type: 'bookmark', id: 'b1', title: 'b1' })
+    const b2 = new Bookmarks.TESTING.BkmNode({ type: 'bookmark', id: 'b2', title: 'b2' })
+    const b3 = new Bookmarks.TESTING.BkmNode({ type: 'bookmark', id: 'b3', title: 'b3' })
+    bkm.addBkm(b1, 0)
+    bkm.addBkm(b2, 0)
+    bkm.addBkm(b3)
+    expect(b1.index).toBe(1)
+    expect(b2.index).toBe(0)
+    expect(b3.index).toBe(2)
+  })
 })
 
 describe('Bookmarks.getMouseOpeningConf()', () => {
