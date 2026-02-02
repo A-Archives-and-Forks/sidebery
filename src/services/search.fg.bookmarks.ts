@@ -68,6 +68,12 @@ export function onBookmarksSearch(activePanel: Panel, panel?: Panel): void {
   visibleBookmarks = []
 
   if (Search.query) {
+    // Save scroll position before search
+    if (!panel.filteredBookmarks && panel.scrollEl) {
+      const id = activePanel !== panel ? `${activePanel.id}${panel.id}` : panel.id
+      Sidebar.scrollPositions[id] = panel.scrollEl.scrollTop
+    }
+
     const query = Search.query
     const prevQuery = Search.prevQuery
     const rootBookmark = Bookmarks.byId.get(panel.rootId)
@@ -131,6 +137,11 @@ export function onBookmarksSearch(activePanel: Panel, panel?: Panel): void {
     panel.filteredBookmarks = undefined
     panel.reactive.filteredBookmarkIds = undefined
     panel.reactive.filteredLen = undefined
+    // Restore scroll position after search
+    if (panel.scrollEl) {
+      const id = activePanel !== panel ? `${activePanel.id}${panel.id}` : panel.id
+      panel.scrollEl.scrollTop = Sidebar.scrollPositions[id] ?? 0
+    }
     if (Search.prevQuery) Selection.resetSelection()
   }
 }

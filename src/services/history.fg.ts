@@ -18,11 +18,13 @@ import * as History from 'src/services/history.fg'
 export interface HistoryReactiveState {
   loading: boolean
   days: T.HistoryDay[]
+  expandedHistoryDays: (boolean | undefined)[]
 }
 
 export let reactive: HistoryReactiveState = {
   days: [],
   loading: false,
+  expandedHistoryDays: [true],
 }
 export let visits: T.Visit[] = []
 export let filtered: T.Visit[] | undefined = undefined
@@ -146,6 +148,7 @@ export async function load(): Promise<void> {
 export function unload(): void {
   History.reactive.loading = false
   History.reactive.days = []
+  History.reactive.expandedHistoryDays = [true]
 
   ready = false
   allLoaded = false

@@ -123,6 +123,7 @@ function onInput(e: Event) {
 }
 
 function onChange(e: Event): void {
+  if (!Search.active) return
   const rawQuery = (e.target as HTMLInputElement | null)?.value ?? ''
   Search.search(rawQuery)
 }

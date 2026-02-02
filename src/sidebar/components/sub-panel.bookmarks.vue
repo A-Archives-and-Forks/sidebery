@@ -34,7 +34,7 @@
 
 <script lang="ts" setup>
 import type { BookmarksPanel, ScrollBoxComponent } from 'src/types'
-import { reactive, computed, onMounted, ref, nextTick } from 'vue'
+import { reactive, computed, onMounted, ref, nextTick, onBeforeUnmount } from 'vue'
 import { DropType } from 'src/enums'
 import { translate } from 'src/dict'
 import { BKM_OTHER_ID, BKM_ROOT_ID, NOID } from 'src/defaults'
@@ -77,6 +77,19 @@ onMounted(() => {
 
   props.bookmarksPanel.pathUp = goUp
   props.bookmarksPanel.pathDown = goDown
+
+  const spId = `${Sidebar.reactive.activePanelId}${props.bookmarksPanel.id}`
+  const sbEl = scrollBox.value?.getScrollBox() ?? undefined
+  const prevScrollPosition = Sidebar.scrollPositions[spId]
+  if (sbEl && prevScrollPosition) sbEl.scrollTop = prevScrollPosition
+})
+
+onBeforeUnmount(() => {
+  const spId = `${Sidebar.reactive.activePanelId}${props.bookmarksPanel.id}`
+  const sbEl = scrollBox.value?.getScrollBox()
+  if (sbEl?.scrollTop !== undefined) {
+    Sidebar.scrollPositions[spId] = sbEl.scrollTop
+  }
 })
 
 const tree = computed(() => {

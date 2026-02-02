@@ -7,6 +7,8 @@ import * as Logs from 'src/services/logs'
 import { Visit } from 'src/types'
 
 export async function onHistorySearch(): Promise<void> {
+  if (Search.active && !Search.prevQuery) saveScrollPositions()
+
   History.setReadyState(false)
   History.setAllLoadedState(false)
   History.reactive.loading = true
@@ -39,11 +41,34 @@ export async function onHistorySearch(): Promise<void> {
   } else {
     History.clearFiltered()
     History.reactive.days = History.recalcDays()
+    restoreScrollPositions()
     if (Search.prevQuery) Selection.resetSelection()
   }
 
   History.setReadyState(true)
   History.reactive.loading = false
+}
+
+function saveScrollPositions() {
+  if (History.subPanelScrollEl) {
+    const spId = `${Sidebar.activePanelId}history`
+    Sidebar.scrollPositions[spId] = History.subPanelScrollEl.scrollTop
+  }
+  if (History.panelScrollEl) {
+    Sidebar.scrollPositions['history'] = History.panelScrollEl.scrollTop
+  }
+}
+
+function restoreScrollPositions() {
+  setTimeout(() => {
+    if (History.subPanelScrollEl) {
+      const spId = `${Sidebar.activePanelId}history`
+      History.subPanelScrollEl.scrollTop = Sidebar.scrollPositions[spId] ?? 0
+    }
+    if (History.panelScrollEl) {
+      History.panelScrollEl.scrollTop = Sidebar.scrollPositions['history'] ?? 0
+    }
+  }, 8)
 }
 
 export function onHistorySearchNext(): void {

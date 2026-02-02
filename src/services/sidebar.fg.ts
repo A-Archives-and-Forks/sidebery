@@ -99,7 +99,7 @@ export const setHasPanelTypeState = (t: E.PanelType, s: boolean) => {
   else if (t === E.PanelType.history) hasHistory = s
   else if (t === E.PanelType.sync) hasSync = s
 }
-export const scrollPositions: Record<ID, number> = {}
+export const scrollPositions: Partial<Record<ID, number>> = {}
 export let convertingPanelLock = false
 
 export let subPanelActive = false
