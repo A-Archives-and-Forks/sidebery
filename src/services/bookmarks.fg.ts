@@ -1700,7 +1700,7 @@ export async function copy(ids: ID[], template: T.CopyTemplate) {
 
   const nodes = getNodesWithChildren(ids, node => {
     if (template.hasU && !node.url) return false
-    if ((template.hasT || template.hasCT) && !node.title) return false
+    if ((template.hasT || template.hasCT) && !(node.parsedTitle ?? node.title)) return false
     return true
   })
   const strings = formatCopyTemplate(ids, nodes, template)
@@ -1742,8 +1742,8 @@ function formatCopyTemplate(ids: ID[], nodes: BkmNode[], template: T.CopyTemplat
 
     let result = template.str
     if (template.hasB) result = result.replaceAll('%B', bullet)
-    if (template.hasCT) result = result.replaceAll('%CT', node.title)
-    if (template.hasT) result = result.replaceAll('%T', node.title)
+    if (template.hasCT) result = result.replaceAll('%CT', node.parsedTitle ?? node.title)
+    if (template.hasT) result = result.replaceAll('%T', node.parsedTitle ?? node.title)
     if (template.hasU) result = result.replaceAll('%U', node.url ?? '')
     lines.push(indent.repeat(indentLvl) + result)
   }
