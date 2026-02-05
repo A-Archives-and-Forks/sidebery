@@ -228,6 +228,7 @@ export const DEFAULT_SETTINGS: SettingsState = {
   wheelAccumulationY: true,
   navSwitchPanelsDelay: 128,
   scrollThroughTabs: 'none',
+  scrollThroughTabsGlobPinIsolate: true,
   scrollThroughVisibleTabs: true,
   scrollThroughTabsSkipDiscarded: true,
   scrollThroughTabsExceptOverflow: true,

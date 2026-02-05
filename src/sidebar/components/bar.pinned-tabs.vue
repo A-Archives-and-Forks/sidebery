@@ -42,8 +42,9 @@ const onWheel = Mouse.getWheelDebouncer(E.WheelDirection.Vertical, (e: WheelEven
     const globaly = (Settings.state.scrollThroughTabs === 'global') !== e.shiftKey
     const cyclic = Settings.state.scrollThroughTabsCyclic !== e.ctrlKey
 
-    if (e.deltaY > 0) Tabs.switchTab(globaly, cyclic, 1, true)
-    if (e.deltaY < 0) Tabs.switchTab(globaly, cyclic, -1, true)
+    const globPin = Settings.state.scrollThroughTabsGlobPinIsolate ? true : undefined
+    if (e.deltaY > 0) Tabs.switchTab(globaly, cyclic, 1, globPin)
+    else if (e.deltaY < 0) Tabs.switchTab(globaly, cyclic, -1, globPin)
   }
 })
 

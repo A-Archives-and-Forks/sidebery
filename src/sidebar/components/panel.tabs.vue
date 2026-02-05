@@ -232,12 +232,13 @@ const onWheel = Mouse.getWheelDebouncer(E.WheelDirection.Vertical, (e: WheelEven
 
     if (e.deltaY !== 0) Mouse.blockWheel(E.WheelDirection.Horizontal)
 
+    const globPin = Settings.state.scrollThroughTabsGlobPinIsolate ? false : undefined
     if (presel) {
-      if (e.deltaY > 0) Tabs.switchTabWithPreselect(globaly, cyclic, 1)
-      else if (e.deltaY < 0) Tabs.switchTabWithPreselect(globaly, cyclic, -1)
+      if (e.deltaY > 0) Tabs.switchTab(globaly, cyclic, 1, globPin, true)
+      else if (e.deltaY < 0) Tabs.switchTab(globaly, cyclic, -1, globPin, true)
     } else {
-      if (e.deltaY > 0) Tabs.switchTab(globaly, cyclic, 1, false)
-      else if (e.deltaY < 0) Tabs.switchTab(globaly, cyclic, -1, false)
+      if (e.deltaY > 0) Tabs.switchTab(globaly, cyclic, 1, globPin)
+      else if (e.deltaY < 0) Tabs.switchTab(globaly, cyclic, -1, globPin)
     }
   }
 })

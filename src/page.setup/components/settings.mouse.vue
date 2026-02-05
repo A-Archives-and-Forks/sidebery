@@ -31,6 +31,13 @@ section(ref="el")
     @update:value="Settings.saveDebounced(150)")
   .sub-fields
     ToggleField(
+      label="settings.scroll_through_tabs_glob_pin_isolate"
+      v-model:value="Settings.state.scrollThroughTabsGlobPinIsolate"
+      dbg="scrollThroughTabsGlobPinIsolate"
+      :default="DEFAULT_SETTINGS.scrollThroughTabsGlobPinIsolate"
+      :inactive="Settings.state.scrollThroughTabs === 'none'"
+      @update:value="Settings.saveDebounced(150)")
+    ToggleField(
       label="settings.scroll_through_visible_tabs"
       v-model:value="Settings.state.scrollThroughVisibleTabs"
       dbg="scrollThroughVisibleTabs"

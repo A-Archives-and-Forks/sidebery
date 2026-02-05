@@ -4911,6 +4911,9 @@ Przykłady: "*", "ctrl+$", "ctrl+alt+g"`,
     zh_TW: '垂直捲動以選取分頁，並在滑鼠離開後啟動它',
     ja: '垂直スクロールでタブを選択し、マウスが離れた後にアクティブ化する',
   },
+  'settings.scroll_through_tabs_glob_pin_isolate': {
+    en: 'Isolate globally pinned tabs',
+  },
   'settings.scroll_through_visible_tabs': {
     en: 'Skip folded tabs',
     de: 'Überspringe eingeklappte Tabs',

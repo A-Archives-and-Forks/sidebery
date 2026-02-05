@@ -972,9 +972,16 @@ let switchTabPause: number | undefined
 /**
  * Activate tab relative to current active tab.
  */
-export function switchTab(globaly: boolean, cycle: boolean, step: number, pinned?: boolean): void {
+export function switchTab(
+  globaly: boolean,
+  cycle: boolean,
+  step: number,
+  globPinned?: boolean,
+  presel?: boolean
+): void {
   if (switchTabPause) return
-  const delay = Settings.state.tabSwitchDelay ?? 0
+  const delay =
+    (presel ? Settings.state.scrollThroughTabsPreselDelay : Settings.state.tabSwitchDelay) ?? 0
   if (delay > 0) {
     switchTabPause = setTimeout(() => {
       clearTimeout(switchTabPause)
@@ -982,149 +989,103 @@ export function switchTab(globaly: boolean, cycle: boolean, step: number, pinned
     }, delay)
   }
 
-  const pinnedAndPanel = Settings.state.pinnedTabsPosition === 'panel' || (globaly && cycle)
+  const panelPinned = Settings.state.pinnedTabsPosition === 'panel'
   const visibleOnly = Settings.state.scrollThroughVisibleTabs
   const skipDiscarded = Settings.state.scrollThroughTabsSkipDiscarded
-
-  let activeTab = Tabs.byId[Tabs.activeId]
-  if (!activeTab) activeTab = Tabs.list.find(t => t.active)
-  if (!activeTab) return
+  const isolatePlobPin = globPinned !== undefined && !panelPinned
 
   const activePanel = Sidebar.panelsById[Sidebar.activePanelId]
   if (!Utils.isTabsPanel(activePanel)) return
 
-  let targetTabId = D.NOID
+  let target: T.Tab | undefined
   let t: T.Tab | boolean = true
   let cycled = false
 
+  // Get a list of tabs
   let tabs
   if (globaly && !activePanel.filteredTabs) {
     tabs = [...Tabs.list]
   } else {
     tabs = [
-      ...(Settings.state.pinnedTabsPosition === 'panel' ? activePanel.pinnedTabs : Tabs.pinned),
+      ...(panelPinned ? activePanel.pinnedTabs : Tabs.pinned),
       ...(activePanel.filteredTabs ?? activePanel.tabs),
     ]
   }
   if (!tabs.length) return
 
-  let index = tabs.findIndex(t => t.id === Tabs.activeId)
-  // Reset index if we're switching only between tabs of a certain pinned state
+  // Find initial index
+  let startTab: T.Tab | undefined
+  let index = -1
+  if (presel) {
+    startTab = Tabs.byId[Selection.getFirst()]
+    if (!startTab) {
+      if (Settings.state.scrollThroughTabsPreselAct) target = Tabs.byId[Tabs.activeId]
+      else startTab = Tabs.byId[Tabs.activeId]
+    }
+  } else {
+    startTab = Tabs.byId[Tabs.activeId]
+    if (!startTab) startTab = Tabs.list.find(t => t.active)
+    if (!startTab) return
+  }
+  if (startTab) {
+    const startTabId = startTab.id
+    index = tabs.findIndex(t => t.id === startTabId)
+  }
+
+  // Reset index if we're switching only between tabs of a certain pinned (globally) state
   // and the active tab has different pinned state
-  if (pinned !== undefined) {
-    if ((pinned && !activeTab.pinned) || (!pinned && !pinnedAndPanel && activeTab.pinned)) {
+  if (startTab) {
+    if (isolatePlobPin && ((globPinned && !startTab.pinned) || (!globPinned && startTab.pinned))) {
       index = -1
     }
   }
   if (index === -1 && step < 0) index = tabs.length
 
-  for (let i = index + step; t; i += step) {
-    t = tabs[i]
-    if (!t) {
-      if (cycle && !cycled) {
-        if (step > 0) i = -1
-        else i = tabs.length
-        cycled = t = true
-        continue
-      } else {
-        break
-      }
-    }
-
-    if (visibleOnly && t.invisible) continue
-    if (skipDiscarded && t.discarded) continue
-    // Switch between only pinned or non-pinned tabs
-    if (pinned !== undefined) {
-      if (pinned && !t.pinned) continue
-      else if (!pinned && !pinnedAndPanel && t.pinned) continue
-    }
-    targetTabId = t.id
-    break
-  }
-
-  if (targetTabId !== D.NOID && targetTabId !== activeTab.id) {
-    Tabs.scrollToTab(targetTabId, false)
-    browser.tabs.update(targetTabId, { active: true }).catch(err => {
-      Logs.err('Tabs.switchTab: Cannot activate tab (2):', err)
-    })
-  }
-}
-
-let switchPreselectTabPause: number | undefined
-export function switchTabWithPreselect(globaly: boolean, cycle: boolean, dir: 1 | -1): void {
-  if (Settings.state.scrollThroughTabsPreselDelay > 0) {
-    if (switchPreselectTabPause) return
-    switchPreselectTabPause = setTimeout(() => {
-      clearTimeout(switchPreselectTabPause)
-      switchPreselectTabPause = undefined
-    }, Settings.state.scrollThroughTabsPreselDelay)
-  }
-
-  const activePanel = Sidebar.panelsById[Sidebar.activePanelId]
-  if (!Utils.isTabsPanel(activePanel)) return
-
-  let tabs
-  if (globaly && !activePanel.filteredTabs) {
-    tabs = [...Tabs.list]
-  } else {
-    if (Settings.state.pinnedTabsPosition === 'panel') {
-      tabs = [...activePanel.pinnedTabs, ...(activePanel.filteredTabs ?? activePanel.tabs)]
-    } else {
-      tabs = [...Tabs.pinned, ...(activePanel.filteredTabs ?? activePanel.tabs)]
-    }
-  }
-  if (!tabs.length) return
-
-  const selIsSet = Selection.isSet()
-  const skipDiscarded = Settings.state.scrollThroughTabsSkipDiscarded
-  let target: T.Tab | undefined
-
-  if (Settings.state.scrollThroughTabsPreselAct && !selIsSet) {
-    target = Tabs.byId[Tabs.activeId]
-    const wrongPanel =
-      target &&
-      (!target.pinned || Settings.state.pinnedTabsPosition === 'panel') &&
-      target.panelId !== activePanel.id
-
-    if (!target || wrongPanel) {
-      target = dir > 0 ? tabs[0] : tabs[tabs.length - 1]
-    }
-  } else {
-    let afterSel = false
-    const tabFinder = (tab: T.Tab) => {
-      if (tab.invisible) return false
-      if (skipDiscarded && tab.discarded) return false
-      if (afterSel) return true
-      if ((selIsSet && tab.sel) || (!selIsSet && tab.active)) afterSel = true
-    }
-    target = dir > 0 ? tabs.find(tabFinder) : tabs.findLast(tabFinder)
-  }
-
+  // Find the target tab
   if (!target) {
-    const tabFinder = (tab: T.Tab) => !tab.invisible && (!skipDiscarded || !tab.discarded)
-    if (cycle) {
-      if (dir > 0) target = tabs.find(tabFinder)
-      else target = tabs.findLast(tabFinder)
-    } else {
-      if (dir > 0) target = tabs.findLast(tabFinder)
-      else target = tabs.find(tabFinder)
+    for (let i = index + step; t; i += step) {
+      t = tabs[i]
+      if (!t) {
+        if (cycle && !cycled) {
+          if (step > 0) i = -1
+          else i = tabs.length
+          cycled = t = true
+          continue
+        } else {
+          break
+        }
+      }
+
+      if (visibleOnly && t.invisible) continue
+      if (skipDiscarded && t.discarded) continue
+      // Switch between only globally-pinned or non-globally-pinned tabs
+      if (isolatePlobPin && ((globPinned && !t.pinned) || (!globPinned && t.pinned))) continue
+      target = t
+      break
     }
   }
   if (!target) return
 
-  Selection.resetSelection()
-  if (
-    globaly &&
-    (!target.pinned || Settings.state.pinnedTabsPosition === 'panel') &&
-    target.panelId !== activePanel.id
-  ) {
-    Sidebar.switchToPanel(target.panelId, true, true)
+  // Preselect
+  if (presel) {
+    Selection.resetSelection()
+    if (globaly && (!target.pinned || panelPinned) && target.panelId !== activePanel.id) {
+      Sidebar.switchToPanel(target.panelId, true, true)
+    }
+    Selection.selectTab(target.id)
+    activateSelectedOnMouseLeave = true
+    Tabs.scrollToTab(target.id, false)
   }
-  Selection.selectTab(target.id)
-
-  activateSelectedOnMouseLeave = true
-
-  Tabs.scrollToTab(target.id, false)
+  // Switch
+  else if (target.id !== startTab?.id) {
+    if (globaly && (!target.pinned || panelPinned) && target.panelId !== activePanel.id) {
+      Sidebar.switchToPanel(target.panelId, true, true)
+    }
+    Tabs.scrollToTab(target.id, false)
+    browser.tabs.update(target.id, { active: true }).catch(err => {
+      Logs.err('Tabs.switchTab: Cannot activate tab (2):', err)
+    })
+  }
 }
 
 const RELOADING_QUEUE: T.Tab[] = []
