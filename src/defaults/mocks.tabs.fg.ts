@@ -18,7 +18,6 @@ export class MTab implements Tab {
   loading: boolean | 'ok' | 'err' = false
   warn: boolean = false
   unread?: boolean | undefined
-  proxified?: boolean | undefined
   relGroupId: ID = NOID
   dstPanelId: ID = NOID
   autoGroupped?: boolean | undefined
@@ -35,9 +34,7 @@ export class MTab implements Tab {
   reopenInContainer?: string | undefined
   customTitle?: string | undefined
   customColor?: string | undefined
-  reloadOnActivation?: boolean | undefined
   moving?: boolean | undefined
-  preventAutoReopening?: boolean | undefined
   previewImg?: string | undefined
   removing?: boolean | undefined
   flashAnimationTimeout?: number | undefined
