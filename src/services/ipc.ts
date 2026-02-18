@@ -1,4 +1,4 @@
-import { AnyFunc, Actions, Message, ActionsKeys, ActionsType } from 'src/types'
+import { AnyFunc, Actions, Message, ActionsKeys, ActionsType, IPCNodeInfo } from 'src/types'
 import { InstanceType } from 'src/enums'
 import { NOID } from 'src/defaults'
 import * as Logs from 'src/services/logs'
@@ -94,6 +94,10 @@ export function setTabId(id: ID): void {
 
 export function registerActions(a: Actions): void {
   actions = a
+}
+
+export function getInfo(): IPCNodeInfo {
+  return { type: _localType, winId: _localWinId, tabId: _localTabId }
 }
 
 export function isConnected(type: InstanceType, id = NOID): boolean {
