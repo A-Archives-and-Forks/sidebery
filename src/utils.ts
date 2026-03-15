@@ -1238,7 +1238,7 @@ export function withoutEmptyFolders<T extends { id: ID; url?: string; parentId?:
 const INDENT_RE = /^(( |\t)*)(.*)/
 const SPACES_ONLY_RE = /^ +$/
 const LINK_RE =
-  /href="(?<htmlUrl>[/0-9A-Za-z-._~:/?#@!%$&'()*+,;=]+)"(.*?)>(?<htmlLabel>.+?)<\/a>|\[(?<mdLabel>.*?)\]\((?<mdUrl>[/0-9A-Za-z-._~:/?#@!%$&'()*+,;=]+)\)|(?<url>([0-9A-Za-z-]{1,63}:\/?\/?[0-9A-Za-z-]{1,63}(\.[0-9A-Za-z-]{1,63})*)(\/[0-9A-Za-z-._~]+)*\/?([#?][0-9A-Za-z-._~:?#@!%$&'()*+,;=]+)*)/g
+  /href="(?<htmlUrl>[0-9A-Za-z-]{1,63}:[\w-.~:?#@!%$&'()*+,;=]*(?:[/;:,@]+[\w-.~:?#@!%$&'()*+,;=]+)+|about:[\w-]+)"(?:.*?)>(?<htmlLabel>.*?)<\/a>|\[(?<mdLabel>.*?)\]\((?<mdUrl>[0-9A-Za-z-]{1,63}:[\w-.~:?#@!%$&'()*+,;=]*(?:[/;:,@]+[\w-.~:?#@!%$&'()*+,;=]+)+|about:[\w-]+)\)|(?<url>[0-9A-Za-z-]{1,63}:[\w-.~:?#@!%$&'()*+,;=]*(?:[/;:,@]+[\w-.~:?#@!%$&'()*+,;=]+)+|about:[\w-]+)/g
 export function parseTextForItems(srcText: string): T.ItemInfo[] {
   const items: T.ItemInfo[] = []
   const parsedLines: { id: number; parentId: number; txt: string; indent: string }[] = []
