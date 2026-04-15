@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+
+## v5.5.1 - 2026.04.15
+
 ### Fixed
 
 - Search: fix CJK query clearing issue by removing global flag from regex (by [@llc0930](https://github.com/llc0930): [#2385](https://github.com/mbnuqw/sidebery/issues/2385))
