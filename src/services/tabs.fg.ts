@@ -35,15 +35,19 @@ export * from 'src/services/tabs.fg.sorting'
 export interface TabsReactiveState {
   pinnedIds: ID[]
   recentlyRemovedLen: number
-  inlinePreviewTabId: ID
-  inlinePreviewPinnedImg: string
+  inlinePreview: boolean
+  inlinePreviewImg: string
+  inlinePreviewTitle: string
+  inlinePreviewUrl: string
 }
 
 export let reactive: TabsReactiveState = {
   pinnedIds: [],
   recentlyRemovedLen: 0,
-  inlinePreviewTabId: D.NOID,
-  inlinePreviewPinnedImg: '',
+  inlinePreview: false,
+  inlinePreviewImg: '',
+  inlinePreviewTitle: '',
+  inlinePreviewUrl: '',
 }
 
 export let ready = false
@@ -149,7 +153,6 @@ export function mutateNativeTabToSideberyTab(nativeTab: T.NativeTab): T.Tab {
       branchColor: null,
       color: null,
       isGroup: tab.isGroup,
-      preview: false,
     }
   }
 
@@ -258,8 +261,7 @@ export function unload(): void {
 
   reactive.pinnedIds = []
   reactive.recentlyRemovedLen = 0
-  reactive.inlinePreviewTabId = D.NOID
-  reactive.inlinePreviewPinnedImg = ''
+  reactive.inlinePreviewImg = ''
   list = []
   byId = {}
   pinned = []

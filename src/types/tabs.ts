@@ -36,7 +36,6 @@ export interface Tab extends NativeTab {
   customTitle?: string
   customColor?: string
   moving?: boolean
-  previewImg?: string
   removing?: boolean
   flashAnimationTimeout?: number
 
@@ -78,7 +77,6 @@ export interface ReactiveTabProps {
   branchColor: string | null
   customColor: string | null
   isGroup: boolean
-  preview: boolean
 }
 
 export interface BgTab extends NativeTab {
