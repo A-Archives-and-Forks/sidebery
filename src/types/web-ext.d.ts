@@ -20,6 +20,7 @@ declare namespace browser {
   type ColorName =
     | 'blue'
     | 'turquoise'
+    | 'cyan'
     | 'green'
     | 'yellow'
     | 'orange'
@@ -27,6 +28,7 @@ declare namespace browser {
     | 'pink'
     | 'purple'
     | 'toolbar'
+    | 'gray'
 
   /**
    * Runtime
