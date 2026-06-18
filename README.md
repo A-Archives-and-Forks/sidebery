@@ -114,7 +114,7 @@ create folder `chrome` with file `userChrome.css`.
     }
 
     /* Hide new Firefox sidebar, restyle addon's sidebar */
-    #sidebar-main, #sidebar-launcher-splitter {
+    #sidebar-main, #sidebar-container, #sidebar-launcher-splitter {
       display: none !important;
     }
     #sidebar-box {
