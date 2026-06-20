@@ -1441,7 +1441,7 @@ function onTabRemoved(tabId: ID, info: browser.tabs.RemoveInfo, detached?: boole
     IPPC.reset(tab)
   }
 
-  if (Preview.state.status === Preview.Status.Open && Preview.state.targetTabId === tabId) {
+  if (Preview.state.targetTabId === tabId) {
     Preview.resetTargetTab(tabId)
   }
 }
